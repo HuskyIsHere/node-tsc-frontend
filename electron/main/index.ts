@@ -50,14 +50,11 @@ async function createWindow() {
     title: 'Main window',
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
-      preload,
-      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // nodeIntegration: true,
-
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
-      // contextIsolation: false,
+        nodeIntegration: false,
     },
+    width: 1600,
+    height: 950,
+    backgroundColor: "#ffffff"
   })
 
   if (url) { // electron-vite-vue#298
@@ -106,6 +103,12 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+ipcMain.on('upload-file', (event, filePath) => {
+  // Handle the file upload logic here
+  console.log(`Received file path: ${filePath}`);
+  // Add your file upload logic here
+});
 
 // New window example arg: new windows url
 ipcMain.handle('open-win', (_, arg) => {
