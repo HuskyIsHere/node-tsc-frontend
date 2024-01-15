@@ -8,11 +8,11 @@ const TrainInputNode = ({ isConnectable, id, data }: NodeProps) => {
     const autoPost = async () => {
       const postData = {
         "node-type": "INPUT",
-        id: id,
-        name: "TrainInput",
-        kwargs: {
-          source: data.source,
-          source_type: "arff",
+        "id": id,
+        "name": "TrainInput",
+        "kwargs": {
+          "source": data.source,
+          "source_type": "arff",
         },
       };
 
