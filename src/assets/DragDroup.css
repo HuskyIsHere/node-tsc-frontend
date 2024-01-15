@@ -1,0 +1,20 @@
+.subcolumn1 {
+  float: left;
+  width: 40%;
+  padding: 20px;
+  height: 700px;
+}
+
+.subcolumn2 {
+  float: left;
+  width: 40%;
+  padding: 20px;
+  height: 700px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+

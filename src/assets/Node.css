@@ -1,0 +1,44 @@
+.blockStyle {
+  width: '200px';
+  height: '80px';
+  padding: '10px';
+  textAlign: 'center';
+}
+
+.box {
+  border:1px solid black;
+}
+
+.custom-node__select {
+  background: #fff;
+  border: 1px solid #1a192b;
+  border-radius: 3px;
+  color: #222;
+  font-size: 12px;
+  padding: 10px;
+  text-align: center;
+  width: 350px;
+}
+
+.custom-node__select button {
+  border: none;
+  color: black;
+  padding: 15px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  background-color: gray;
+  border-radius: 3px;
+}
+
+.custom-node__input {
+  background: #fff;
+  border: 1px solid #1a192b;
+  border-radius: 3px;
+  color: #222;
+  font-size: 12px;
+  padding: 10px;
+  text-align: center;
+  width: 125px;
+}
