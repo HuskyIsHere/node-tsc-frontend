@@ -18,14 +18,17 @@ const DndPanel: React.FC = () => {
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'output')} draggable>
         Output Node
       </div>
-      <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'Input')} draggable>
+      <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'InputFileNode')} draggable>
         InputFile Node
       </div>
-      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'TrainInput')} draggable>
+      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'TrainInputNode')} draggable>
         TrainInput Node
       </div>
-      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'TestInput')} draggable>
+      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'TestInputNode')} draggable>
         TestInput Node
+      </div>
+      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'TrainPrepNode')} draggable>
+        TrainPrep Node
       </div>
     </aside>
   );

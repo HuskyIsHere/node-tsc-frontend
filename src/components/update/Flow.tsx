@@ -15,15 +15,16 @@ import 'react-flow-renderer/dist/style.css';
 import Sidebar from '../update/SideBar';
 import '../../assets/Flow.css';
 import InputFileNode from './Node/InputFileNode';
-import TrainInput from './Node/TrainInputNode';
+import TrainInputNode from './Node/TrainInputNode';
 import CustomNode from './Node/CustomNode';
-import TestInput from './Node/TestInputNode'
+import TestInputNode from './Node/TestInputNode'
+import TrainPrepNode from './Node/TrainPrepNode';
 
 const nodeTypes = {
-  Input: InputFileNode,
-  Custom: CustomNode,
-  TrainInput: TrainInput,
-  TestInput: TestInput
+  InputFileNode: InputFileNode,
+  TrainInputNode: TrainInputNode,
+  TestInputNode: TestInputNode,
+  TrainPrepNode: TrainPrepNode
 };
 
 export const Flow: React.FC = () => {

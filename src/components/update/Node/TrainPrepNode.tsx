@@ -33,7 +33,7 @@ const TrainPrepNode = ({ isConnectable, id, data }: NodeProps) => {
     }, [id, data, isConnectable]);
 
     return (
-        <div className="custom-node__select">
+        <div className="custom-node__input">
             <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
             <div>
                 <p>TrainPrep Node</p>
