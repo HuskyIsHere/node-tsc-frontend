@@ -3,13 +3,13 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import axios from "axios";
 import "../../../assets/Node.css";
 
-const TestInputNode = ({ isConnectable, id, data }: NodeProps) => {
+const InputNode = ({ isConnectable, id, data }: NodeProps) => {
   useEffect(() => {
     const autoPost = async () => {
       const postData = {
         "node-type": "INPUT",
         "id": id,
-        "name": "TestInput",
+        "name": "TrainInput",
         "kwargs": {
           "source": data.source,
           "source_type": "arff",
@@ -21,7 +21,7 @@ const TestInputNode = ({ isConnectable, id, data }: NodeProps) => {
           "http://127.0.0.1:5000/project/node",
           postData
         );
-        console.log("Post successful:", response.data);
+        console.log("Post node successful:", response.data);
       } catch (error) {
         console.error("Error posting data:", error);
       }
@@ -33,6 +33,18 @@ const TestInputNode = ({ isConnectable, id, data }: NodeProps) => {
     }
   }, [id, data, isConnectable]);
 
+  let choice = [
+                {
+                  label: 'Train Input',
+                  nodeType: 'INPUT',
+                  name: 'TrainInput'
+                },
+                {
+                  label: 'Test Input',
+                  nodeType: 'INPUT',
+                  name: 'TestInput'
+                },]
+
   return (
     <div className="custom-node__input">
       <Handle
@@ -40,9 +52,18 @@ const TestInputNode = ({ isConnectable, id, data }: NodeProps) => {
         position={Position.Top}
         isConnectable={isConnectable}
       />
-      <div>
-        <p>TestInput Node</p>
-      </div>
+        <div className="custom-node__header">
+          Input Node
+        </div>
+        <div className="custom-node__select">
+          <select id="selectOption">
+            {choice.map((option, index) => (
+              <option key={index} value={option.name}>
+                {option.label}
+              </option>
+            ))}`
+          </select>
+        </div>
       <Handle
         type="source"
         position={Position.Bottom}
@@ -52,4 +73,4 @@ const TestInputNode = ({ isConnectable, id, data }: NodeProps) => {
   );
 };
 
-export default memo(TestInputNode);
+export default memo(InputNode);

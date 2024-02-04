@@ -9,7 +9,7 @@
   border:1px solid black;
 }
 
-.custom-node__select {
+.custom-node__file {
   background: #fff;
   border: 1px solid #1a192b;
   border-radius: 3px;
@@ -41,4 +41,14 @@
   padding: 10px;
   text-align: center;
   width: 125px;
+}
+
+.custom-node__header {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.custom-node__select {
+  position: relative;
+  margin-bottom: 10px;
 }

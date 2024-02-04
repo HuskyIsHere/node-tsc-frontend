@@ -34,7 +34,7 @@ const InputFileNode = ({ isConnectable, id }: NodeProps) => {
   };
 
   return (
-    <div className="custom-node__select">
+    <div className="custom-node__file">
       <input type="file" onChange={handleFileChange} />
       <button
         className="upload-button"

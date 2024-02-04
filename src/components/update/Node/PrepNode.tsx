@@ -3,7 +3,7 @@ import { Handle, Position, NodeProps } from 'react-flow-renderer';
 import axios from 'axios';
 import '../../../assets/Node.css';
 
-const TrainPrepNode = ({ isConnectable, id, data }: NodeProps) => {
+const PrepNode = ({ isConnectable, id, data }: NodeProps) => {
     useEffect(() => {
         const autoPost = async () => {
             const postData = {
@@ -20,7 +20,7 @@ const TrainPrepNode = ({ isConnectable, id, data }: NodeProps) => {
 
             try {
                 const response = await axios.post('http://127.0.0.1:5000/project/node', postData);
-                console.log('Post successful:', response.data);
+                console.log('Post node successful:', response.data);
             } catch (error) {
                 console.error('Error posting data:', error);
             }
@@ -32,15 +32,33 @@ const TrainPrepNode = ({ isConnectable, id, data }: NodeProps) => {
         }
     }, [id, data, isConnectable]);
 
+    let choice = [
+                {
+                label: 'Train Prep',
+                nodeType: 'PREP',
+                name: 'TrainPrep'
+                },{
+                label: 'Test Prep',
+                nodeType: 'PREP',
+                name: 'TestPrep'
+                },]
+
     return (
         <div className="custom-node__input">
             <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
             <div>
-                <p>TrainPrep Node</p>
+                <p>Prep Node</p>
             </div>
+            <select id="selectOption">
+            {choice.map((option, index) => (
+                <option key={index} value={option.name}>
+                    {option.label}
+                </option>
+                ))}`
+            </select>
             <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
         </div>
     );
 };
 
-export default memo(TrainPrepNode);
+export default memo(PrepNode);

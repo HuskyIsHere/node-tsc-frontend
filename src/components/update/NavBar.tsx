@@ -15,7 +15,7 @@ export const NavBar: React.FC = () => {
   return (
     <div className="nav-bar">
       <div>
-        <p>UWU</p>
+        <p>Node TSC</p>
         <button
           onClick={handleButtonClick}
           className={path === "/" ? "nav-select" : "nav-not-select"}
