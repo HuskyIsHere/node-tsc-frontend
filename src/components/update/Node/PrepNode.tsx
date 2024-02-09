@@ -49,13 +49,13 @@ const PrepNode = ({ isConnectable, id, data }: NodeProps) => {
             <div>
                 <p>Prep Node</p>
             </div>
-            <select id="selectOption">
+            {/* <select id="selectOption">
             {choice.map((option, index) => (
                 <option key={index} value={option.name}>
                     {option.label}
                 </option>
                 ))}`
-            </select>
+            </select> */}
             <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
         </div>
     );

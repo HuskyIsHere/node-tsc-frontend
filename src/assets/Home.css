@@ -24,17 +24,10 @@
 
 .column2 {
   float: left;
-  width: 67%;
+  width: 79%;
   padding: 25px;
   height: 700px;
   background-color: white;
-}
-.column3 {
-  float: left;
-  width: 25%;
-  padding: 25px;
-  height: 700px;
-  background-color: gray;
 }
 
 .row:after {

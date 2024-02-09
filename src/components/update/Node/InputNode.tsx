@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import axios from "axios";
 import "../../../assets/Node.css";
@@ -11,7 +11,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         "id": id,
         "name": "TrainInput",
         "kwargs": {
-          "source": data.source,
+          "source": "/home/natch/final/node-tsc/temp_data/GunPoint_TRAIN.arff",
           "source_type": "arff",
         },
       };
@@ -30,7 +30,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
     if (data.action === false) {
       data.action = true;
       autoPost();
-    }
+  }
   }, [id, data, isConnectable]);
 
   let choice = [
@@ -55,7 +55,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         <div className="custom-node__header">
           Input Node
         </div>
-        <div className="custom-node__select">
+        {/* <div className="custom-node__select">
           <select id="selectOption">
             {choice.map((option, index) => (
               <option key={index} value={option.name}>
@@ -63,7 +63,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
               </option>
             ))}`
           </select>
-        </div>
+        </div> */}
       <Handle
         type="source"
         position={Position.Bottom}

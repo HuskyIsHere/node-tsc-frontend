@@ -16,16 +16,21 @@ import ReactFlow, {
 import 'react-flow-renderer/dist/style.css';
 import Sidebar from '../update/SideBar';
 import '../../assets/Flow.css';
+import { Config } from '@/components/update/Config';
 import InputFileNode from './Node/InputFileNode';
 import InputNode from './Node/InputNode';
 import PrepNode from './Node/PrepNode';
 import ApplyModelNode from './Node/ApplyModelNode';
+import ShapeletTransformNode from './Node/ShapeletTransformNode';
+import DecisionTreeNode from './Node/DecisionTreeNode';
 
 const nodeTypes = {
   InputFileNode: InputFileNode,
   InputNode: InputNode,
   PrepNode: PrepNode,
-  ApplyModelNode: ApplyModelNode
+  ApplyModelNode: ApplyModelNode,
+  ShapeletTransformNode: ShapeletTransformNode,
+  DecisionTreeNode: DecisionTreeNode
 };
 
 export const Flow: React.FC = () => {
@@ -34,6 +39,8 @@ export const Flow: React.FC = () => {
   const getId = () => uuidv4();
   const [numberNode, setNumberNode] =  useState(0);
   const [numberEdge, setNumberEdge] =  useState(0);
+
+  const [selectedNode, setSelectedNode] = useState();
 
   const initialNodes: Node[] = [];
 
@@ -74,7 +81,7 @@ export const Flow: React.FC = () => {
         id: getId(),
         type,
         position: { x, y },
-        data: {label: `${type} node`, action: false, source: "TO ADD SOURCE"},
+        data: {label: `${type} node`, action: false},
       };
 
       setNodes((nds: Node[]) => nds.concat(newNode));
@@ -92,6 +99,12 @@ export const Flow: React.FC = () => {
         "dest": last.target,
         "port-type": "DATA"
       };
+
+      nodes.forEach(node => {
+        if(node.id == last.source && node.type == "ShapeletTransformNode"){
+          postData['port-type'] = "MODEL"
+        }
+      })
 
       try {
         const response = await axios.post('http://127.0.0.1:5000/project/edge', postData);
@@ -179,7 +192,7 @@ export const Flow: React.FC = () => {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => {    
     if (numberEdge < edges.length){
       postEdges();
     }
@@ -191,9 +204,12 @@ export const Flow: React.FC = () => {
     setNumberNode(nodes.length)
   }, [nodes, edges]);
 
-
+  function handleOnNodeClick(event, node) : void {
+    setSelectedNode(node)
+  }
 
   return(
+    <>
     <ReactFlowProvider>
     <div className="dndflow">
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
@@ -201,6 +217,7 @@ export const Flow: React.FC = () => {
           <Sidebar />
         </div>
           <ReactFlow
+            onNodeClick={handleOnNodeClick}
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
@@ -218,5 +235,7 @@ export const Flow: React.FC = () => {
         </div>
     </div>
     </ReactFlowProvider>
+    <Config data={selectedNode} />
+    </>
   );
 };

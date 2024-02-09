@@ -21,6 +21,12 @@ const DndPanel: React.FC = () => {
       <div className="dndnode" onDragStart={(event) => onDragStart(event, 'ApplyModelNode')} draggable>
       Apply Model Node
       </div>
+      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'ShapeletTransformNode')} draggable>
+      Shapelet Transform Node
+      </div>
+      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'DecisionTreeNode')} draggable>
+      Decision Tree Node
+      </div>
     </aside>
   );
 };

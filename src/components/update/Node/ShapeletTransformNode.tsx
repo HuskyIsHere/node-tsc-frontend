@@ -3,15 +3,19 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import axios from "axios";
 import "../../../assets/Node.css";
 
-const ApplyModelNode = ({ isConnectable, id, data }: NodeProps) => {
-
+const ShapeletTransformNode = ({ isConnectable, id, data }: NodeProps) => {
     const postData = {
-        "node-type": "APPLY",
+        "node-type": "SHAPELET_TRANSFORM",
         "id": id,
-        "name": "ApplyModel (DT)",
+        "name": "ShapeletTransform",
         "kwargs": {
-
-        },
+            "n_shapelets":5, 
+            "window_sizes":[18],
+            "sort":true,
+            "random_state":0,
+            "n_jobs":-1,
+            "remove_similar":true
+        }
     };
 
     useEffect(() => {
@@ -34,25 +38,16 @@ const ApplyModelNode = ({ isConnectable, id, data }: NodeProps) => {
         }
     }, [id, data, isConnectable]);
 
-    function showParameter(): void{
-        sessionStorage.setItem('form', JSON.stringify(postData));
-    }
 
     return(
-        <div className="custom-node__input" onClick={showParameter}>
-            <Handle type="target" position={Position.Top} id="input1" style={{ right: 35, left: 'auto' }} isConnectable={isConnectable} />
-            <Handle type="target" position={Position.Top} id="input2" style={{ left: 40 }} isConnectable={isConnectable} />
+        <div className="custom-node__input">
+            <Handle type="target" position={Position.Top} isConnectable={isConnectable}/>
             <div>
-                <p>Apply Model</p>
+                <p>Shapelet Transform Node</p>
             </div>
-            <Handle
-            type="source"
-            position={Position.Bottom}
-            isConnectable={isConnectable}
-            />
+            <Handle type="source" position={Position.Bottom} isConnectable={isConnectable}/>
         </div>
-    );
-
+    )
 };
 
-export default memo(ApplyModelNode);
+export default memo(ShapeletTransformNode);

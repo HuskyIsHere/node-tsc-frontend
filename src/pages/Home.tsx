@@ -12,12 +12,11 @@ export const Home: React.FC = () => {
       <div className="home">
         <div className="row">
           <div className="column2">
-          <Flow/>
+            <Flow/>
           </div>
-          <div className="column3">
-            <h2>Column 3</h2>
-            <p>Some text..</p>
-          </div>
+          {/* <div className="column3">
+            <Config/>
+          </div> */}
         </div>
       </div>
     </div>
