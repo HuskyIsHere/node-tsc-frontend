@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import '../../assets/Config.css';
+import { BrowserWindow, app } from 'electron';
 
 interface ConfigProps {
   data: any; 
@@ -171,8 +172,14 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			console.log('Response:', response.data);
 		} catch (error) {
 			console.error('Error:', error);
+		}
 	}
 
+	async function handleVisualization() {
+		console.log("onClick handleVisualization")
+		console.log(`selected node ${data?.id}`)
+		sessionStorage.setItem("nodeId", data?.id)
+		window.open('/visualize', '_blank', 'width=200,height=200')
 	}
 
 	return (
@@ -203,6 +210,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
       {renderKwargs()}
 			<button onClick={updateConfig}>Update</button>
 			<button onClick={handleExecute}>Execute</button>
+			<button onClick={handleVisualization}>Visualize</button>
     </div>
   );
 };

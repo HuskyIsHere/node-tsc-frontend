@@ -1,4 +1,4 @@
-import React, { useRef, ReactNode}from 'react';
+import React, { useRef, ReactNode }from 'react';
 import { NavBar } from '../components/update/NavBar';
 import { Flow } from '../components/update/Flow'
 import 'react-flow-renderer/dist/style.css';
