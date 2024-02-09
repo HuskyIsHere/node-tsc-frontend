@@ -177,7 +177,8 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 
 	async function handleVisualization() {
 		console.log("onClick handleVisualization")
-		console.log(`selected node ${data?.id}`)
+		console.log(`selected node ${data?.id} type: ${data?.type}`)
+		sessionStorage.setItem("nodeType", data?.type)
 		sessionStorage.setItem("nodeId", data?.id)
 		window.open('/visualize', '_blank', 'width=200,height=200')
 	}

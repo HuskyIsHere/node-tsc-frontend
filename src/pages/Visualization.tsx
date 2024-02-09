@@ -8,11 +8,13 @@ import React, { useRef, ReactNode }from 'react';
 export const Visualization: React.FC = () => {
 
   const nodeId = sessionStorage.getItem("nodeId")
+  const nodeType = sessionStorage.getItem("nodeType")
 
   return (
     <div>
       <p>Welcome to visualization</p>
       <p>nodeId = {nodeId}</p>
+      <p>nodeType = {nodeType}</p>
     </div>
   );
 };
