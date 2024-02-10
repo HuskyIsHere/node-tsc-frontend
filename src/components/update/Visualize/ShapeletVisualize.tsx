@@ -1,14 +1,15 @@
-import { memo } from "react"
+import { memo, useContext, useEffect } from "react"
 import Plot from "react-plotly.js";
 
-const ShapeletVisualize = ({
-    shapelets,
-    labels,
-    scores
-}) => {
-    var n_shapelets = shapelets.lenght
+const ShapeletVisualize = (nodeVisualize) => {
+    const visualize = nodeVisualize.nodeVisualize
 
     var data = new Array()
+
+    const shapelets = visualize["shapelets"]
+    const scores = visualize["scores"]
+    const labels = visualize["labels"]
+
     shapelets.forEach((sl, idx) => {
         // console.log("this is len", sl.length)
         data.push({
@@ -19,7 +20,6 @@ const ShapeletVisualize = ({
             name: `Shapelet ${idx} (label: ${labels[idx]})`
         })
     })
-    console.log("this is new data", data)
 
     var layout = {
         title: 'Shapelets',
@@ -28,9 +28,6 @@ const ShapeletVisualize = ({
     return (
         <div>
             <h1>Discovered Shapelets</h1>
-            {/* <div>{shapelets}</div>
-            <div>{labels}</div>
-            <div>{scores}</div> */}
             <Plot
                 data={data}
                 layout={layout}

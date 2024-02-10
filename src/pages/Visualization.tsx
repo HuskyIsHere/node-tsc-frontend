@@ -1,21 +1,53 @@
 import ShapeletVisualize from '@/components/update/Visualize/ShapeletVisualize';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 export const Visualization: React.FC = () => {
 
-  const nodeId = sessionStorage.getItem("nodeId")
-  const nodeType = sessionStorage.getItem("nodeType")
+  const nodeId = "a819ba13-d37e-47c8-a520-f66123c7afb9"
+
+  const [nodeInfo, setNodeInfo] = useState(null)
+  const [nodeVisualize, setVisualze] = useState(null)
+  const [isMount, setIsMount] = useState(false)
+
+  const fetchInfo = (nodeId) => {
+    axios.get(
+      "http://127.0.0.1:5000/project/node",
+      {params: {nodeId: nodeId}}
+    ).then((response) => setNodeInfo(response.data));
+  }
+
+  const fetchVisualize = (nodeId) => {
+    axios.get(
+      "http://127.0.0.1:5000/visualize/data",
+      {params: {nodeId: nodeId}}
+    ).then((response) => setVisualze(response.data))
+  }
+
+  useEffect(() => {
+    if (!isMount) {
+      fetchInfo(nodeId)
+      fetchVisualize(nodeId)
+      console.log("items", nodeInfo)
+    }
+  }, [nodeInfo]);
+
+  useEffect(() => {
+    setIsMount(true)
+  , [isMount]})
+
+  // const nodeId = sessionStorage.getItem("nodeId")
+
+  // TODO: chage to dynamic node id
 
   // TODO: change this to axios request/respond
-  var response = JSON.parse('{"shapelets": [[-0.74036611, -0.71579707, -0.68907501, -0.66368477, -0.64774623, -0.64299726, -0.6412037, -0.64075695, -0.64373173, -0.64641902, -0.64726293, -0.64674411, -0.64507244, -0.64392904, -0.64289324, -0.64251373, -0.64078278, -0.64052908], [1.2610293, 1.1175746, 0.95725203, 0.78539811, 0.61598357, 0.45022796, 0.28726923, 0.14467732, 0.018479204, -0.10955546, -0.21449895, -0.31115256, -0.37319512, -0.42763604, -0.45897579, -0.47963183, -0.50516626, -0.5176427], [-0.72380034, -0.71406588, -0.70226943, -0.68974861, -0.67661751, -0.66460398, -0.65339892, -0.64164859, -0.63983, -0.64013096, -0.64070531, -0.6397999, -0.63954563, -0.63782728, -0.63920061, -0.64026016, -0.64113375, -0.64140622], [-0.60630997, -0.60217483, -0.59876466, -0.60109458, -0.60928041, -0.63638713, -0.66562853, -0.71135456, -0.75854686, -0.80634678, -0.84126638, -0.86559768, -0.87881574, -0.88291503, -0.88511388, -0.88412875, -0.88310831, -0.88377215], [-0.59624711, -0.60199228, -0.60366626, -0.61166132, -0.61850251, -0.62600682, -0.6403343, -0.65847879, -0.68010001, -0.7087596, -0.753288, -0.80225866, -0.86268037, -0.93760041, -1.0069274, -1.043742, -1.0534569, -1.0493616]], "labels": [1, 1, 1, 1, 1], "scores": [0.5324719691007263, 0.5316186300593067, 0.5284719691007262, 0.517216133433126, 0.5063092706880279]}')
-  console.log(response)
 
   return (
     <div>
       <p>Welcome to visualization</p>
       <p>nodeId = {nodeId}</p>
-      <p>nodeType = {nodeType}</p>
-      <ShapeletVisualize shapelets={response.shapelets} labels={response.labels} scores={response.scores} />
+      {nodeInfo && <p>nodeType = {nodeInfo["type"]}</p>}
+      {nodeVisualize && nodeInfo["type"] == "ShapeletTransformNode" && <ShapeletVisualize nodeVisualize={nodeVisualize}/>}
     </div>
   );
 };
