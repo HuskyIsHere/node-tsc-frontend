@@ -101,8 +101,14 @@ export const Flow: React.FC = () => {
       };
 
       nodes.forEach(node => {
-        if(node.id == last.source && node.type == "ShapeletTransformNode"){
-          postData['port-type'] = "MODEL"
+        if(node.id == last.target && node.type == "ApplyModelNode"){
+          nodes.forEach(sourceNode => {
+            if(sourceNode.id == last.source && sourceNode.type == "ShapeletTransformNode"){
+              postData['port-type'] = "MODEL"
+            } else if(sourceNode.id == last.source && sourceNode.type == "DecisionTreeNode") {
+              postData['port-type'] = "MODEL"
+            }
+          })
         }
       })
 
@@ -116,49 +122,24 @@ export const Flow: React.FC = () => {
     autoPost();
   }
 
-  function getNodeEdge(nodes, edges): void{
-    const autoGet = async () =>{
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:5000/project/info"
-        );
-        console.log("Get data successful:", response.data['nodes']);
-        deleteNode(nodes, response)
-        deleteEdge(edges, response)
-      } catch (error) {
-        console.error("Error getting data:", error);
-      }
-    }
-    autoGet();
-  }
-
-  function deleteNode(nodes, response): void{
+  function onNodeRemove(node): void{
     const autoDelete = async (id) =>{
       const deleteData = {
         "id": id
       };
       try {
-        const response = await axios.delete("http://127.0.0.1:5000/project/node", {data: deleteData});
+        const response = await axios.delete("http://127.0.0.1:5000/project/node", {"data": deleteData});
         console.log("Get data successful:", response.data);
       } catch (error) {
         console.error("Error getting data:", error);
       }
+    console.log(node[0].id); 
     }
-
-    let nodesList = []
-    for(let j = 0; j < nodes.length; j++){
-      nodesList[j] = nodes[j]["id"]
-    }
-    for(let i = 0; i < response.data['nodes'].length; i++){
-      if(!nodesList.includes(response.data['nodes'][i]["id"].toString())){
-        let toDeleteNode = response.data['nodes'][i]["id"].toString()
-        autoDelete(toDeleteNode)
-      }
-    }
+    autoDelete(node[0].id);
   }
 
-  function deleteEdge(edges, response): void{
-    console.log("delete edges", edges);
+  function onEdgeRemove(edge): void{
+    console.log(edge);
     const autoDelete = async (source, dest) =>{
       const deleteData = {
           "source": source,
@@ -171,25 +152,8 @@ export const Flow: React.FC = () => {
       } catch (error) {
         console.error("Error getting data:", error);
       }
-
-      let edgeList = []
-      for(let j = 0; j < edges.length; j++){
-        edgeList[0] = edges[j]["source"]
-        edgeList[1] = edges[j]["dest"]
-      }
-
-      for(let i = 0; i < response.data['edges'].length; i++){
-        console.log(response.data['edges'][i]["source"]);
-        console.log(response.data['edges'][i]["dest"]);
-        
-        if(!edgeList[0].includes(response.data['edges'][i]["source"]) && !edgeList[1].includes(response.data['edges'][i]["dest"])){
-          let source = response.data['edges'][i]["source"];
-          let dest = response.data['edges'][i]["dest"];        
-          autoDelete(source, dest);
-        }
-      }
-
     }
+    autoDelete(edge[0].source, edge[0].target);
   }
 
   useEffect(() => {    
@@ -197,9 +161,6 @@ export const Flow: React.FC = () => {
       postEdges();
     }
 
-    if(numberNode > nodes.length || numberEdge > edges.length){
-      getNodeEdge(nodes, edges);
-    }
     setNumberEdge(edges.length)
     setNumberNode(nodes.length)
   }, [nodes, edges]);
@@ -218,6 +179,8 @@ export const Flow: React.FC = () => {
         </div>
           <ReactFlow
             onNodeClick={handleOnNodeClick}
+            onNodesDelete={onNodeRemove}
+            onEdgesDelete={onEdgeRemove}
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}

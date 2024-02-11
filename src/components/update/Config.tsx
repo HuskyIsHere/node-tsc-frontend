@@ -50,7 +50,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			"id": "",
 			"name": "",
 			"kwargs": {
-					"source": "/home/natch/final/node-tsc/temp_data/GunPoint_TRAIN.arff",
+					"source": "",
 					"source_type": "arff"
 			}
 		},
@@ -58,10 +58,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			"id": "",
 			"name": "",
 			"kwargs": {
-					"instructions": [
-							["set_role", "target", "target"],
-							["change_type", "target", "int"]
-					]
+					"instructions": []
 			}
 		},
 		DecisionTreeNode: {
@@ -137,10 +134,14 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 		if (data?.type == "PrepNode") {
 			postData["name"] = selectedName
 			postData["id"] = data?.id
-			postData["kwargs"]["instructions"] = nodeConfig;
+			postData["kwargs"]["instructions"] = [
+				["set_role", "target", "target"],
+				["change_type", "target", "int"]
+		];
 		} else if (data?.type == "InputNode"){
 			postData["name"] = selectedName
 			postData["id"] = data?.id
+			postData["kwargs"]["source"] = "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TEST.arff"
 		} else {
 			postData["id"] = data?.id
 			postData["kwargs"] = nodeConfig

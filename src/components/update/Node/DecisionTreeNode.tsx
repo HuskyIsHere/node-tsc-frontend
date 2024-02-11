@@ -42,6 +42,7 @@ const DecisionTreeNode = ({ isConnectable, id, data }: NodeProps) => {
             <div>
                 <p>Decision Tree Node</p>
             </div>
+            <Handle type="source" position={Position.Bottom} isConnectable={isConnectable}/>
         </div>
     );
 };

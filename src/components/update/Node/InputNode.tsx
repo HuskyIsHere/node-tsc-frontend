@@ -11,7 +11,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         "id": id,
         "name": "TrainInput",
         "kwargs": {
-          "source": "/home/natch/final/node-tsc/temp_data/GunPoint_TRAIN.arff",
+          "source": "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TRAIN.arff",
           "source_type": "arff",
         },
       };
@@ -55,15 +55,6 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         <div className="custom-node__header">
           Input Node
         </div>
-        {/* <div className="custom-node__select">
-          <select id="selectOption">
-            {choice.map((option, index) => (
-              <option key={index} value={option.name}>
-                {option.label}
-              </option>
-            ))}`
-          </select>
-        </div> */}
       <Handle
         type="source"
         position={Position.Bottom}
