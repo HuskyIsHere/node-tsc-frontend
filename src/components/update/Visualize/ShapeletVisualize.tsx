@@ -1,9 +1,12 @@
 import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
+import { useState } from "react";
 
 const ShapeletVisualize = (nodeVisualize) => {
     const visualize = nodeVisualize.nodeVisualize["shapelet_transformation"]
+
+    const [graphData, setGraphData] = useState([])
 
     var data = new Array()
 
@@ -12,7 +15,7 @@ const ShapeletVisualize = (nodeVisualize) => {
     const labels = visualize["labels"]
     const criterion = visualize["criterion"]
 
-    // graph
+    // BEGIN GRAPH
     const uniqueLabels = [...new Set(labels)]
     shapelets.forEach((sl, idx) => {
         // console.log("this is len", sl.length)
@@ -21,17 +24,24 @@ const ShapeletVisualize = (nodeVisualize) => {
             y: sl,
             // type: 'line',
             mode: 'lines',
-            name: `Shapelet ${idx} (label: ${labels[idx]})`
+            name: `Shapelet ${idx} (class: ${labels[idx]})`,
+            showlegend: true
         })
     })
     var layout = {
         title: 'Shapelets',
     }
+    // END GRAPH
 
-    // score table
+    // BEGIN TABLE
     var columns = [
         { title: "Name", field: "name" },
-        { title: "Score", field: "score"},
+        { title: `Score ${criterion}`, field: "score" },
+        { 
+            title: "Class", field: "class",
+            headerFilter: "input",
+            headerFilterOptions: {initial: "2"}
+        },
     ]
     var tableData = []
     scores.forEach((score, idx) => {
@@ -39,31 +49,53 @@ const ShapeletVisualize = (nodeVisualize) => {
             id: idx,
             name: `Shapelet ${idx}`,
             score: score,
+            class: labels[idx],
         })
     });
+    // END TABLE
+
+    function dataFiltering(filter) {
+        console.log("data filtering...")
+    }
+
+    function dataFiltered(filters, rows) {
+        const filteredRows = rows.map((r) => r._row.data)
+        console.log("data filtered...", filteredRows[0])    
+
+        const selectedIndices = []
+        filteredRows.forEach((s, idx) => {
+            selectedIndices.push(s.id)
+        })
+        
+        var plot = document.getElementById("plot")
+        plot.data.forEach((s, idx) => {
+            if (!selectedIndices.includes(idx)) {
+                s.visible = false
+            } else {
+                s.visible = true
+            }
+        })
+        Plotly.react(plot, data, layout)
+    }
 
     return (
         <div>
             <h1>Discovered Shapelets</h1>
 
-            <div>
-            <label htmlFor="shapeletIndex">Label: </label>
-            <select name="shapeletIndex" id="labelFilter">
-                <option value="all">all</option>
-                {uniqueLabels.map((v: string) => {
-                    return (<option value={String(v)}>{v}</option>)
-                })}
-            </select>
-            </div>
-
             <Plot
                 data={data}
                 layout={layout}
+                divId="plot"
             />
 
-            <ReactTabulator
+            <ReactTabulator     
                 data={tableData}
                 columns={columns}
+                layout={"fitData"}
+                events={{
+                    dataFiltering: dataFiltering,
+                    dataFiltered: dataFiltered
+                }}
             />
         </div>
     )
