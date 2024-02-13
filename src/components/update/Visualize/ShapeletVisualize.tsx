@@ -78,6 +78,28 @@ const ShapeletVisualize = (nodeVisualize) => {
         Plotly.react(plot, data, layout)
     }
 
+    function rowClick(e, row) {
+        var plot = document.getElementById("plot")
+        plot.data.forEach((s, idx) => {
+            s.visible = true
+        })
+        Plotly.react(plot, data, layout)
+    }
+
+    function rowDblClick(e, row) {
+        var rowData = row._row.data
+        var plot = document.getElementById("plot")
+        plot.data.forEach((s, idx) => {
+            console.log(idx, s, rowData.id)
+            if (idx != rowData.id) {
+                s.visible = false
+            } else {
+                s.visible = true
+            }
+        })
+        Plotly.react(plot, data, layout)
+    }
+
     return (
         <div>
             <h1>Discovered Shapelets</h1>
@@ -94,7 +116,9 @@ const ShapeletVisualize = (nodeVisualize) => {
                 layout={"fitData"}
                 events={{
                     dataFiltering: dataFiltering,
-                    dataFiltered: dataFiltered
+                    dataFiltered: dataFiltered,
+                    rowClick: rowClick,
+                    rowDblClick: rowDblClick,
                 }}
             />
         </div>
