@@ -1,12 +1,12 @@
 import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
-import { useState } from "react";
+import { useRef } from "react";
 
 const ShapeletVisualize = (nodeVisualize) => {
     const visualize = nodeVisualize.nodeVisualize["shapelet_transformation"]
 
-    const [graphData, setGraphData] = useState([])
+    var tableRef = useRef();
 
     var data = new Array()
 
@@ -54,47 +54,55 @@ const ShapeletVisualize = (nodeVisualize) => {
     });
     // END TABLE
 
-    function dataFiltering(filter) {
-        console.log("data filtering...")
-    }
-
     function dataFiltered(filters, rows) {
         const filteredRows = rows.map((r) => r._row.data)
-        console.log("data filtered...", filteredRows[0])    
 
         const selectedIndices = []
         filteredRows.forEach((s, idx) => {
             selectedIndices.push(s.id)
         })
-        
-        var plot = document.getElementById("plot")
-        plot.data.forEach((s, idx) => {
-            if (!selectedIndices.includes(idx)) {
-                s.visible = false
-            } else {
-                s.visible = true
-            }
-        })
-        Plotly.react(plot, data, layout)
+
+        if (tableRef.current) {
+            tableRef.current.deselectRow() // deselect all row
+        }
+
+        showTraces(selectedIndices)
     }
 
-    function rowClick(e, row) {
-        var plot = document.getElementById("plot")
-        plot.data.forEach((s, idx) => {
-            s.visible = true
-        })
-        Plotly.react(plot, data, layout)
+    function rowSelectionChanged(data, rows, selected, deselected) {
+        if (data.length == 0) {
+            // if there is no selected row show all traces
+            showTraces()
+        } else {
+            // else show all selected rows
+            const selectedIndices = []
+            data.forEach(d => {
+                selectedIndices.push(d.id)
+            });
+            showTraces(selectedIndices)
+        }
     }
 
-    function rowDblClick(e, row) {
-        var rowData = row._row.data
+    // Utility functions
+    function showTraces(selectedIndices=[]) {
+        // hide all specified trace and show the rest
         var plot = document.getElementById("plot")
-        plot.data.forEach((s, idx) => {
-            console.log(idx, s, rowData.id)
-            if (idx != rowData.id) {
-                s.visible = false
-            } else {
+
+        // show all traces
+        if (selectedIndices.length == 0) {
+            plot.data.forEach((s, idx) => {
                 s.visible = true
+            })
+            Plotly.react(plot, data, layout)
+            return
+        }
+
+        // show specific 
+        plot.data.forEach((s, idx) => {
+            if (selectedIndices.includes(idx)) {
+                s.visible = true
+            } else {
+                s.visible = false
             }
         })
         Plotly.react(plot, data, layout)
@@ -110,15 +118,17 @@ const ShapeletVisualize = (nodeVisualize) => {
                 divId="plot"
             />
 
-            <ReactTabulator     
+            <ReactTabulator 
+                onRef={(r) => (tableRef = r)}
                 data={tableData}
                 columns={columns}
                 layout={"fitData"}
+                options={{
+                    selectable: true
+                }}
                 events={{
-                    dataFiltering: dataFiltering,
                     dataFiltered: dataFiltered,
-                    rowClick: rowClick,
-                    rowDblClick: rowDblClick,
+                    rowSelectionChanged: rowSelectionChanged,
                 }}
             />
         </div>
