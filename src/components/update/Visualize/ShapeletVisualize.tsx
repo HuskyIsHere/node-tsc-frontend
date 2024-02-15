@@ -36,9 +36,9 @@ const ShapeletVisualize = (nodeVisualize) => {
     // BEGIN TABLE
     var columns = [
         { title: "Name", field: "name" },
-        { title: `Score ${criterion}`, field: "score" },
+        { title: `Score (${criterion})`, field: "score" },
         { 
-            title: "Class", field: "class",
+            title: "Label", field: "label",
             headerFilter: "input",
             headerFilterOptions: {initial: "2"}
         },
@@ -49,11 +49,12 @@ const ShapeletVisualize = (nodeVisualize) => {
             id: idx,
             name: `Shapelet ${idx}`,
             score: score,
-            class: labels[idx],
+            label: labels[idx],
         })
     });
     // END TABLE
 
+    // BEGIN TABLE EVENTS
     function dataFiltered(filters, rows) {
         const filteredRows = rows.map((r) => r._row.data)
 
@@ -70,18 +71,26 @@ const ShapeletVisualize = (nodeVisualize) => {
     }
 
     function rowSelectionChanged(data, rows, selected, deselected) {
+        const selectedIndices = []
+
         if (data.length == 0) {
-            // if there is no selected row show all traces
-            showTraces()
+            // if there is no selected row show all active traces
+            tableRef.current.getData('active').forEach(d => {
+                selectedIndices.push(d.id)
+            })
         } else {
             // else show all selected rows
-            const selectedIndices = []
             data.forEach(d => {
                 selectedIndices.push(d.id)
             });
-            showTraces(selectedIndices)
         }
+        showTraces(selectedIndices)
     }
+
+    function deselectAllRows() {
+        tableRef.current.deselectRow()
+    }
+    // END TABLE EVENTS
 
     // Utility functions
     function showTraces(selectedIndices=[]) {
@@ -117,6 +126,10 @@ const ShapeletVisualize = (nodeVisualize) => {
                 layout={layout}
                 divId="plot"
             />
+
+            <div id="tableActionBar">
+                <button onClick={deselectAllRows}>Deselect All</button>
+            </div>
 
             <ReactTabulator 
                 onRef={(r) => (tableRef = r)}
