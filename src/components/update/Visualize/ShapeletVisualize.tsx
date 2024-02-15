@@ -1,12 +1,13 @@
 import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const ShapeletVisualize = (nodeVisualize) => {
     const visualize = nodeVisualize.nodeVisualize["shapelet_transformation"]
 
     var tableRef = useRef();
+    var [labelFilter, setLabelFilter] = useState('all')
 
     var data = new Array()
 
@@ -24,7 +25,7 @@ const ShapeletVisualize = (nodeVisualize) => {
             y: sl,
             // type: 'line',
             mode: 'lines',
-            name: `Shapelet ${idx} (class: ${labels[idx]})`,
+            name: `Shapelet ${idx} (label: ${labels[idx]})`,
             showlegend: true
         })
     })
@@ -37,11 +38,7 @@ const ShapeletVisualize = (nodeVisualize) => {
     var columns = [
         { title: "Name", field: "name" },
         { title: `Score (${criterion})`, field: "score" },
-        { 
-            title: "Label", field: "label",
-            headerFilter: "input",
-            headerFilterOptions: {initial: "2"}
-        },
+        { title: "Label", field: "label" },
     ]
     var tableData = []
     scores.forEach((score, idx) => {
@@ -87,6 +84,16 @@ const ShapeletVisualize = (nodeVisualize) => {
         showTraces(selectedIndices)
     }
 
+    function onLabelSelected(event) {
+        const opt = event.target.value
+        
+        if (opt != 'all') {
+            tableRef.current.setFilter("label", "=", opt)
+        } else {
+            tableRef.current.clearFilter()
+        }
+    }
+
     function deselectAllRows() {
         tableRef.current.deselectRow()
     }
@@ -128,6 +135,11 @@ const ShapeletVisualize = (nodeVisualize) => {
             />
 
             <div id="tableActionBar">
+                <label>Label: </label>
+                <select onChange={onLabelSelected}>                    
+                    <option value="all">all</option>
+                    { uniqueLabels.map((lb, idx) => <option value={lb} key={lb}>{lb}</option>)}
+                </select>
                 <button onClick={deselectAllRows}>Deselect All</button>
             </div>
 
