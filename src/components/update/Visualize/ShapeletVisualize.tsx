@@ -1,25 +1,33 @@
 import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 const ShapeletVisualize = (nodeVisualize) => {
+
+    const arrayRange = (start, stop) =>
+        Array.from(
+            { length: (stop - start)},
+            (_, index) => start + index
+    );
+
     const visualize = nodeVisualize.nodeVisualize["shapelet_transformation"]
 
     var tableRef = useRef();
-    var [labelFilter, setLabelFilter] = useState('all')
 
-    var data = new Array()
+    var data = new Array() // shapelets
+    var dataTimeSeries = new Object() // object of time series
 
     const shapelets = visualize["shapelets"]
     const scores = visualize["scores"]
     const labels = visualize["labels"]
     const criterion = visualize["criterion"]
+    const timeseries = visualize["timeseries"]
+    const indices = visualize["indices"]
 
     // BEGIN GRAPH
     const uniqueLabels = [...new Set(labels)]
     shapelets.forEach((sl, idx) => {
-        // console.log("this is len", sl.length)
         data.push({
             x: Array.from(Array.from(Array(sl.length).keys())),
             y: sl,
@@ -29,8 +37,28 @@ const ShapeletVisualize = (nodeVisualize) => {
             showlegend: true
         })
     })
+
+    const numberOfShapelets = data.length
+    for (var i=0; i<numberOfShapelets; i++) {
+        var idx = indices[i]
+        var ts = timeseries[i]
+        dataTimeSeries[i] = [{
+            x:  Array.from(Array.from(Array(ts.length).keys())),
+            y: ts,
+            mode: 'lines',
+            name: "timeseries",
+            hoverinfo: 'skip',
+        }, {
+            x: arrayRange(idx[1], idx[2]),
+            y: shapelets[i],
+            mode: 'lines',
+            name: 'shapelet',
+            hoverinfo: 'skip',
+        }]
+    }
+
     var layout = {
-        title: 'Shapelets',
+        title: 'Discovered Shapelets',
     }
     // END GRAPH
 
@@ -75,13 +103,46 @@ const ShapeletVisualize = (nodeVisualize) => {
             tableRef.current.getData('active').forEach(d => {
                 selectedIndices.push(d.id)
             })
+
+            showTraces(selectedIndices)
         } else {
             // else show all selected rows
             data.forEach(d => {
                 selectedIndices.push(d.id)
             });
+
+            if (selectedIndices.length == 1) {
+                // show a single timeseries with shapelet location
+                var plot = document.getElementById("plot")
+
+                var idx = selectedIndices[0]
+
+                Plotly.react(plot, dataTimeSeries[idx], { 
+                    title: `Shapelet ${idx} (label: ${labels[idx]})`,
+                    shapes: [
+                        // 1st highlight during Feb 4 - Feb 6
+                        {
+                            type: 'rect',
+                            // x-reference is assigned to the x-values
+                            xref: 'x',
+                            // y-reference is assigned to the plot paper [0,1]
+                            yref: 'paper',
+                            x0: indices[idx][1],
+                            y0: 0,
+                            x1: indices[idx][2],
+                            y1: 1,
+                            fillcolor: '#d3d3d3',
+                            opacity: 0.2,
+                            line: {
+                                width: 0
+                            }
+                        },
+                    ]
+                })
+            } else {
+                showTraces(selectedIndices)
+            }
         }
-        showTraces(selectedIndices)
     }
 
     function onLabelSelected(event) {
@@ -103,25 +164,24 @@ const ShapeletVisualize = (nodeVisualize) => {
     function showTraces(selectedIndices=[]) {
         // hide all specified trace and show the rest
         var plot = document.getElementById("plot")
+        Plotly.react(plot, data, layout) // refresh all data in case of single time series case
 
         // show all traces
         if (selectedIndices.length == 0) {
             plot.data.forEach((s, idx) => {
                 s.visible = true
             })
-            Plotly.react(plot, data, layout)
-            return
+        } else {
+            // show specific 
+            plot.data.forEach((s, idx) => {
+                if (selectedIndices.includes(idx)) {
+                    s.visible = true
+                } else {
+                    s.visible = false
+                }
+            })
         }
-
-        // show specific 
-        plot.data.forEach((s, idx) => {
-            if (selectedIndices.includes(idx)) {
-                s.visible = true
-            } else {
-                s.visible = false
-            }
-        })
-        Plotly.react(plot, data, layout)
+        Plotly.react(plot, data, layout) // rerender again
     }
 
     return (
