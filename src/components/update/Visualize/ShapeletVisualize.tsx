@@ -4,7 +4,9 @@ import { ReactTabulator } from 'react-tabulator'
 import { useState } from "react";
 
 const ShapeletVisualize = (nodeVisualize) => {
-    const visualize = nodeVisualize.nodeVisualize["shapelet_transformation"]
+    console.log(nodeVisualize["nodeVisualize"]);
+    
+    const visualize = nodeVisualize["nodeVisualize"]
 
     const [graphData, setGraphData] = useState([])
 
