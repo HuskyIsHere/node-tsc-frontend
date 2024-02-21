@@ -1,17 +1,23 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { Visualization } from './pages/Visualization';
 
-import './index.css'
-
-import './demos/ipc'
-// If you want use Node.js, the`nodeIntegration` needs to be enabled in the Main process.
-// import './demos/node'
-
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          {/* <Route path='/work' element={<Work />}></Route> */}
+        </Route>
+        <Route path="/visualize" element={<Visualization />}></Route>
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
+);
 
-postMessage({ payload: 'removeLoading' }, '*')

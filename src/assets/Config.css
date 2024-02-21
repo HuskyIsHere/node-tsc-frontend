@@ -1,0 +1,9 @@
+
+.panel {
+    position: absolute;
+    top: 160px;
+    bottom: 10px;
+    right: 10px;
+    width: 20%;
+    background-color: gray;
+}
