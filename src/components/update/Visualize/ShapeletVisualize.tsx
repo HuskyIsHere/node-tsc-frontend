@@ -5,13 +5,15 @@ import { useRef } from "react";
 
 const ShapeletVisualize = (nodeVisualize) => {
 
+
     const arrayRange = (start, stop) =>
         Array.from(
             { length: (stop - start)},
             (_, index) => start + index
     );
+    
+    const visualize = nodeVisualize["nodeVisualize"]
 
-    const visualize = nodeVisualize.nodeVisualize["shapelet_transformation"]
 
     var tableRef = useRef();
 

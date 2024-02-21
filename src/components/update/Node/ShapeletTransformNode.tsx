@@ -10,7 +10,7 @@ const ShapeletTransformNode = ({ isConnectable, id, data }: NodeProps) => {
         "name": "ShapeletTransform",
         "kwargs": {
             "n_shapelets":5, 
-            "window_sizes":[18],
+            "window_sizes":[18, 24],
             "sort":true,
             "random_state":0,
             "n_jobs":-1,
