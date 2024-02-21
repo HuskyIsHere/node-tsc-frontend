@@ -36,20 +36,6 @@ export const Visualization: React.FC = () => {
     }
   };
 
-  // const fetchInfo = (nodeId) => {
-  //   axios.get(
-  //     "http://127.0.0.1:5000/project/node",
-  //     {params: {nodeId: nodeId}}
-  //   ).then((response) => setNodeInfo(response.data));
-  // }
-
-  // const fetchVisualize = (nodeId) => {
-  //   axios.get(
-  //     "http://127.0.0.1:5000/visualize/data",
-  //     {params: {nodeId: nodeId}}
-  //   ).then((response) => setVisualze(response.data))
-  // }
-
   useEffect(() => {
     console.log(nodeId);
     if (!isMount) {
@@ -62,24 +48,6 @@ export const Visualization: React.FC = () => {
   useEffect(() => {
 
   }, [])
-
-  // useEffect(() => {
-  //   if (!isMount) {
-  //     fetchInfo(nodeId)
-  //     fetchVisualize(nodeId)
-  //     console.log("items", nodeInfo)
-  //   }
-  // }, [nodeInfo]);
-
-  // useEffect(() => {
-  //   setIsMount(true)
-  // }, [isMount])
-
-  // const nodeId = sessionStorage.getItem("nodeId")
-
-  // TODO: chage to dynamic node id
-
-  // TODO: change this to axios request/respond
 
   return (
     <div>
