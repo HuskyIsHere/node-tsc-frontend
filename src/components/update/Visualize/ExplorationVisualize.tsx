@@ -1,3 +1,4 @@
+import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
 import { useRef } from "react";
@@ -5,10 +6,10 @@ import { useRef } from "react";
 const ExplorationVisualize = (nodeVisualize) => {
 
     const visualizeData = nodeVisualize.nodeVisualize["data"]
-    // const visualizeMetaData = nodeVisualize.nodeVisualize["meta"]
-    const visualizeMetaData = "A"
+    const visualizeMetaData = nodeVisualize.nodeVisualize["meta"]
+    const visualizeLabelDist = nodeVisualize.nodeVisualize["label_distribution"]
 
-    console.log(visualizeMetaData)
+    console.log(visualizeMetaData, visualizeLabelDist)
 
     var numberOfTimeseries = visualizeData["data"].length
     var colTypes = visualizeData["col_type"]
@@ -20,24 +21,63 @@ const ExplorationVisualize = (nodeVisualize) => {
         { title: "Name", field: "name" },
         { title: "Type", field: "type" },
     ]
+    if (visualizeMetaData) {
+        colTypeTableColumns.push({ title: "Remark", field: "remark" })
+    }
     var colTypeTableData = []
     colTypes.forEach((ct, idx) => {
-        colTypeTableData.push({
+        var data = {
             name: ct[0],
             type: ct[1],
-        })
+        }
+        // TODO: add case for excluded columns
+        if (visualizeMetaData) {
+            if (visualizeMetaData["target"] == ct[0]) {
+                data["remark"] = "label"
+            } else {
+
+            }
+        }
+        colTypeTableData.push(data)
         uniqueColTypes.add(ct[1])
     })
-    console.log(uniqueColTypes)
     // END TABLE COL TYPE
 
-    function hideDiv(divId) {
-        const table = document.getElementById(divId)
-        if (table.style.display === "none") {
-            table.style.display = "block"
-        } else {
-            table.style.display = "none"
-        }
+    // START PLOT LABEL DIST
+    var labelDistPlotData = []
+    if (visualizeLabelDist) {
+        var x = []
+        var y = []
+        
+        Object.keys(visualizeLabelDist).forEach(function(key) {
+            x.push(`label: ${key}`) // label
+            y.push(visualizeLabelDist[key]) // count
+        });
+
+        labelDistPlotData.push({
+            x: x,
+            y: y,
+            type: "bar"
+        })
+    }
+    // END PLOT LABEL DIST
+
+    function focusDiv(divId) {
+        const divs = document.getElementsByClassName("focusable")
+        Array.from(divs).forEach((div, idx) => {
+            const d = document.getElementById(div.id)
+            if (divId == div.id) {
+                d.style.display = "block"
+            } else {
+                d.style.display = "none"
+            }
+        })
+    }
+
+    if (visualizeMetaData && visualizeLabelDist) {
+        focusDiv("timeSeriesTable")
+    } else {
+        focusDiv("colTypeTable")
     }
 
     return (
@@ -47,16 +87,16 @@ const ExplorationVisualize = (nodeVisualize) => {
             <div>Total number of timeseries: {numberOfTimeseries}</div>
 
             <div>
-                <button onClick={() => hideDiv("colTypeTable")}>
+                <button onClick={() => focusDiv("colTypeTable")}>
                     Column Types
                 </button>
 
-                {visualizeMetaData && 
-                <button onClick={() => hideDiv("timeSeriesTable")}>Time Series</button>
+                {visualizeMetaData && visualizeLabelDist &&
+                <button onClick={() => focusDiv("timeSeriesTable")}>Time Series</button>
                 }
             </div>
 
-            <div id="colTypeTable">
+            <div id="colTypeTable" className="focusable">
                 <div className="tableActionBar">
                 <label>Column Type: </label>
                 <select onChange={(event) => {
@@ -77,12 +117,27 @@ const ExplorationVisualize = (nodeVisualize) => {
                     data = {colTypeTableData}
                     columns={colTypeTableColumns}
                     layout={"fitdata"}
+                    options={{
+                        rowFormatter:function(row) {
+                            // TODO: add formatter for exclude columns
+                            if (visualizeMetaData) {
+                                var target = visualizeMetaData["target"]
+                                if(target && row.getData().name == target){
+                                    row.getElement().style.backgroundColor = "#80ff00";
+                                }
+                            }
+                        }
+                    }}
                 />
             </div>
 
-            {visualizeMetaData &&
-            <div id='timeSeriesTable'>
-                Time Series
+            {visualizeMetaData && visualizeLabelDist &&
+            <div id='timeSeriesTable' className="focusable" >
+                <Plot 
+                    data={labelDistPlotData}
+                    layout={{title: "Label Distribution"}}
+                    divId="plotLabelDist"
+                />
             </div>
             }
         </div>
