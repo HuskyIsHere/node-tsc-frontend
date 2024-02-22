@@ -12,8 +12,7 @@ const ShapeletVisualize = (nodeVisualize) => {
             (_, index) => start + index
     );
     
-    const visualize = nodeVisualize["nodeVisualize"]
-
+    const visualize = nodeVisualize["nodeVisualize"]["shapelet_transformation"]
 
     var tableRef = useRef();
 
