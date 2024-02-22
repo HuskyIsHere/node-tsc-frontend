@@ -194,7 +194,7 @@ const ShapeletVisualize = (nodeVisualize) => {
                 divId="plot"
             />
 
-            <div id="tableActionBar">
+            <div className="tableActionBar">
                 <label>Label: </label>
                 <select onChange={onLabelSelected}>                    
                     <option value="all">all</option>
