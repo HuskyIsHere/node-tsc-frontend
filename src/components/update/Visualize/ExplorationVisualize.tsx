@@ -5,8 +5,10 @@ import { useRef } from "react";
 const ExplorationVisualize = (nodeVisualize) => {
 
     const visualizeData = nodeVisualize.nodeVisualize["data"]
+    // const visualizeMetaData = nodeVisualize.nodeVisualize["meta"]
+    const visualizeMetaData = "A"
 
-    console.log(visualizeData)
+    console.log(visualizeMetaData)
 
     var numberOfTimeseries = visualizeData["data"].length
     var colTypes = visualizeData["col_type"]
@@ -29,7 +31,7 @@ const ExplorationVisualize = (nodeVisualize) => {
     console.log(uniqueColTypes)
     // END TABLE COL TYPE
 
-    function hideTable(divId) {
+    function hideDiv(divId) {
         const table = document.getElementById(divId)
         if (table.style.display === "none") {
             table.style.display = "block"
@@ -45,9 +47,13 @@ const ExplorationVisualize = (nodeVisualize) => {
             <div>Total number of timeseries: {numberOfTimeseries}</div>
 
             <div>
-                <button onClick={() => hideTable("colTypeTable")}>
+                <button onClick={() => hideDiv("colTypeTable")}>
                     Column Types
                 </button>
+
+                {visualizeMetaData && 
+                <button onClick={() => hideDiv("timeSeriesTable")}>Time Series</button>
+                }
             </div>
 
             <div id="colTypeTable">
@@ -73,6 +79,12 @@ const ExplorationVisualize = (nodeVisualize) => {
                     layout={"fitdata"}
                 />
             </div>
+
+            {visualizeMetaData &&
+            <div id='timeSeriesTable'>
+                Time Series
+            </div>
+            }
         </div>
     )
 }
