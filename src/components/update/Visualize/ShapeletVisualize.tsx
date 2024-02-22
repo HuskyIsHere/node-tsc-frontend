@@ -5,7 +5,6 @@ import { useRef } from "react";
 
 const ShapeletVisualize = (nodeVisualize) => {
 
-
     const arrayRange = (start, stop) =>
         Array.from(
             { length: (stop - start)},
