@@ -10,7 +10,7 @@ const ExplorationVisualize = (nodeVisualize) => {
     const visualizeMetaData = nodeVisualize.nodeVisualize["meta"]
     const visualizeLabelDist = nodeVisualize.nodeVisualize["label_distribution"]
 
-    console.log(visualizeMetaData, visualizeLabelDist)
+    console.log(visualizeData)
 
     var numberOfTimeseries = visualizeData["data"].length
     var colTypes = visualizeData["col_type"]
@@ -70,6 +70,21 @@ const ExplorationVisualize = (nodeVisualize) => {
         { title: "Label", field: "label"}
     ]
     const timeSeriesTableData = []
+    if (visualizeMetaData) {
+        // add time series
+        for (var i=0; i<numberOfTimeseries; i++) {
+            timeSeriesTableData.push({
+                index: i,
+                timeseries: visualizeData["data"][i],
+            })
+        }
+        // add label if have any
+        if (visualizeData["labels"]) {
+            for (var i=0; i<numberOfTimeseries; i++) {
+                timeSeriesTableData[i]["label"] = visualizeData["labels"][i]
+            }
+        }
+    }
     // END TIME SERIES TABLE
 
     function focusDiv(divId) {
@@ -157,11 +172,11 @@ const ExplorationVisualize = (nodeVisualize) => {
 
             {visualizeData && visualizeMetaData && 
             <div id="timeSeriesTable" className="focusable" style={initStyleTimeSeriesTable}>
-            <ReactTabulator 
-                data={timeSeriesTableData}
-                columns={timeSeriesTableColumns}
-                layout={"fitdata"}
-            />
+                <ReactTabulator 
+                    data={timeSeriesTableData}
+                    columns={timeSeriesTableColumns}
+                    layout={"fitdata"}
+                />
             </div>
             }
 
