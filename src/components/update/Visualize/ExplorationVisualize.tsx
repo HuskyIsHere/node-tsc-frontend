@@ -1,7 +1,8 @@
 import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
+import { chartFormatter } from '@/scripts/chartFormatter.js'
 import { ReactTabulator } from 'react-tabulator'
-import { useRef } from "react";
+import React, { useRef } from "react";
 
 const ExplorationVisualize = (nodeVisualize) => {
 
@@ -62,6 +63,15 @@ const ExplorationVisualize = (nodeVisualize) => {
     }
     // END PLOT LABEL DIST
 
+    // START TIME SERIES TABLE
+    const timeSeriesTableColumns = [
+        { title: "Index", field: "index" },
+        { title: "Time Series", field: "timeseries", formatter:chartFormatter, formatterParams:{type:"line"}},
+        { title: "Label", field: "label"}
+    ]
+    const timeSeriesTableData = []
+    // END TIME SERIES TABLE
+
     function focusDiv(divId) {
         const divs = document.getElementsByClassName("focusable")
         Array.from(divs).forEach((div, idx) => {
@@ -78,11 +88,15 @@ const ExplorationVisualize = (nodeVisualize) => {
     const initStyleColTypeTable = {
         display: "block"
     }
+    const initStyleTimeSeriesDistPlot = {
+        display: "none"
+    }
     const initStyleTimeSeriesTable = {
         display: "none"
     }
     if (visualizeMetaData && visualizeLabelDist) {
         initStyleColTypeTable.display = "none"
+        initStyleTimeSeriesDistPlot.display = "none"
         initStyleTimeSeriesTable.display = "block"
     }
 
@@ -97,8 +111,12 @@ const ExplorationVisualize = (nodeVisualize) => {
                     Column Types
                 </button>
 
-                {visualizeMetaData && visualizeLabelDist &&
+                {visualizeData && visualizeMetaData && 
                 <button onClick={() => focusDiv("timeSeriesTable")}>Time Series</button>
+                }
+
+                {visualizeMetaData && visualizeLabelDist &&
+                <button onClick={() => focusDiv("timeSeriesDistPlot")}>Label Distribution</button>
                 }
             </div>
 
@@ -137,8 +155,18 @@ const ExplorationVisualize = (nodeVisualize) => {
                 />
             </div>
 
+            {visualizeData && visualizeMetaData && 
+            <div id="timeSeriesTable" className="focusable" style={initStyleTimeSeriesTable}>
+            <ReactTabulator 
+                data={timeSeriesTableData}
+                columns={timeSeriesTableColumns}
+                layout={"fitdata"}
+            />
+            </div>
+            }
+
             {visualizeMetaData && visualizeLabelDist &&
-            <div id='timeSeriesTable' className="focusable" style={initStyleTimeSeriesTable}>
+            <div id='timeSeriesDistPlot' className="focusable" style={initStyleTimeSeriesDistPlot}>
                 <Plot 
                     data={labelDistPlotData}
                     layout={{title: "Label Distribution"}}
