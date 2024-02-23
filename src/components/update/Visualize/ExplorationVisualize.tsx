@@ -74,10 +74,16 @@ const ExplorationVisualize = (nodeVisualize) => {
         })
     }
 
+    // config default rendering style
+    const initStyleColTypeTable = {
+        display: "block"
+    }
+    const initStyleTimeSeriesTable = {
+        display: "none"
+    }
     if (visualizeMetaData && visualizeLabelDist) {
-        focusDiv("timeSeriesTable")
-    } else {
-        focusDiv("colTypeTable")
+        initStyleColTypeTable.display = "none"
+        initStyleTimeSeriesTable.display = "block"
     }
 
     return (
@@ -96,7 +102,7 @@ const ExplorationVisualize = (nodeVisualize) => {
                 }
             </div>
 
-            <div id="colTypeTable" className="focusable">
+            <div id="colTypeTable" className="focusable" style={initStyleColTypeTable}>
                 <div className="tableActionBar">
                 <label>Column Type: </label>
                 <select onChange={(event) => {
@@ -132,7 +138,7 @@ const ExplorationVisualize = (nodeVisualize) => {
             </div>
 
             {visualizeMetaData && visualizeLabelDist &&
-            <div id='timeSeriesTable' className="focusable" >
+            <div id='timeSeriesTable' className="focusable" style={initStyleTimeSeriesTable}>
                 <Plot 
                     data={labelDistPlotData}
                     layout={{title: "Label Distribution"}}

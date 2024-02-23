@@ -129,7 +129,7 @@ const ShapeletVisualize = (nodeVisualize) => {
                             yref: 'paper',
                             x0: indices[idx][1],
                             y0: 0,
-                            x1: indices[idx][2],
+                            x1: indices[idx][2]-1,
                             y1: 1,
                             fillcolor: '#d3d3d3',
                             opacity: 0.2,
