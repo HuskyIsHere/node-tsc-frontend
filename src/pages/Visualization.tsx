@@ -1,5 +1,6 @@
 import ExplorationVisualize from '@/components/update/Visualize/ExplorationVisualize';
 import ShapeletVisualize from '@/components/update/Visualize/ShapeletVisualize';
+import DecisionTreeVisualize from '@/components/update/Visualize/DecisionTreeVisualize';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
@@ -57,6 +58,7 @@ export const Visualization: React.FC = () => {
       {nodeInfo && <p>nodeType = {nodeInfo["type"]}</p>}
       {nodeVisualize && nodeInfo["type"] == "ShapeletTransformNode" && <ShapeletVisualize nodeVisualize={nodeVisualize}/>}
       {nodeVisualize && (nodeInfo["type"] == "InputNode" || nodeInfo["type"] == "PrepNode") && <ExplorationVisualize nodeVisualize={nodeVisualize}/>}
+      {nodeVisualize && nodeInfo["type"] == "DecisionTreeNode" && <DecisionTreeVisualize nodeVisualize={nodeVisualize}/>}
     </div>
   );
 };

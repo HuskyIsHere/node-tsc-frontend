@@ -2,7 +2,7 @@ import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { chartFormatter } from '@/scripts/chartFormatter.js'
 import { ReactTabulator } from 'react-tabulator'
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 const ExplorationVisualize = (nodeVisualize) => {
 

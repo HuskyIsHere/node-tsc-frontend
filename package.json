@@ -20,6 +20,7 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^1.0.4",
     "axios": "^1.6.5",
     "buffer": "^6.0.3",
     "electron-updater": "^6.1.1",
