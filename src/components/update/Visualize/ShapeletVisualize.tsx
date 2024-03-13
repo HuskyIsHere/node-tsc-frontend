@@ -24,6 +24,7 @@ const ShapeletVisualize = (nodeVisualize) => {
     const criterion = visualize["criterion"]
     const timeseries = visualize["timeseries"]
     const indices = visualize["indices"]
+    const distances = visualize["transformed_data"]
 
     // BEGIN GRAPH
     const uniqueLabels = [...new Set(labels)]
@@ -184,6 +185,23 @@ const ShapeletVisualize = (nodeVisualize) => {
         Plotly.react(plot, data, layout) // rerender again
     }
 
+    // START: DISTANCE TABLE
+    var distanceTableColumns = [{ title: "Index", field: "index" }]
+    Array.apply(null, Array(shapelets.length)).map((x, i) => { 
+        distanceTableColumns.push(
+            { title: `Shapelet ${i}`, field: `shapelet-${i}`}
+        ) 
+    })
+    var distanceTableData = Array.apply(null, Array(distances.length)).map((x, i) => {
+        var obj = { index: i }
+        for (var k=0; k<shapelets.length; k++) {
+            obj[`shapelet-${k}`] = distances[i][k]
+        }
+        return obj
+    })
+    console.log(distanceTableData)
+    // END: DISTANCE TABLE
+
     function focusDiv(divId) {
         const divs = document.getElementsByClassName("focusable")
         Array.from(divs).forEach((div, idx) => {
@@ -250,7 +268,11 @@ const ShapeletVisualize = (nodeVisualize) => {
 
             <div id="distanceTable" className="focusable" style={initStyleDistanceTable}>
                 <div>
-                    This is distance table
+                    <ReactTabulator 
+                        data={distanceTableData}
+                        columns={distanceTableColumns}
+                        layout={"fitdata"}
+                    />
                 </div>
             </div>
             
