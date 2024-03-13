@@ -1,14 +1,13 @@
 import ReactFlow from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import dagre from '@dagrejs/dagre';
+import Plot from "react-plotly.js";
 
 
 const DecisionTreeVisualize = (nodeVisualize) => {
 
     const visualizeTree = nodeVisualize.nodeVisualize["tree_rules"]
     const visualizeShapelet = nodeVisualize.nodeVisualize["shapelet_transformation"]
-
-    console.log(visualizeTree)
 
     const nodeWidth = 172;
     const nodeHeight = 36;
@@ -40,17 +39,19 @@ const DecisionTreeVisualize = (nodeVisualize) => {
     const initialNodes = [];
     dagreGraph.nodes().forEach(function(v) {
         const node = dagreGraph.node(v);
-        const node_id = node["label"]
+        const nodeId = node["label"]
+        const nodeData = visualizeTree["tree_nodes"][nodeId]
+        const label = `shapelet: ${nodeData["feature"]} impurity: ${Number(nodeData["impurity"]).toFixed(4)}`
         initialNodes.push({
-            id: node_id.toString(),
+            id: nodeId.toString(),
             position: { 
                 x: node["x"], 
                 y: node["y"],
             },
-            data: { label: JSON.stringify(visualizeTree["tree_nodes"][node_id]) },
+            data: { label: label },
+            node_data: nodeData
         })
     });
-    console.log("init", initialNodes);
 
     const initialEdges = [];
     visualizeTree["tree_nodes"].forEach((node, idx) => {
@@ -63,15 +64,66 @@ const DecisionTreeVisualize = (nodeVisualize) => {
             })
         }
     })
-    console.log("init", initialEdges);
+
+    // START EXTENDED NODE INFO
+    // node onClick function
+    var extendedNodeInfoMode = null
+    const onNodeClick = (event, object) => {
+        const nodeData = object.node_data
+        extendedNodeInfoMode = 1
+
+        const div = document.getElementById("extendedNodeInfo")
+        const divGraph = div.childNodes[0]
+        const divInfo = div.childNodes[1]
+
+        if (nodeData["feature"] != null) {
+            divGraph.style["display"] = "block"
+
+            var sl = visualizeShapelet["shapelets"][nodeData["feature"]]
+            var shapeletData = {
+                x: Array.from(Array.from(Array(sl.length).keys())),
+                y: sl,
+                mode: "lines",
+                name: "shapelet"
+            }
+            console.log(shapeletData)
+
+            var plot = document.getElementById("plot")
+            Plotly.react(plot, [shapeletData], {
+                title: "Shapelet"
+            })
+
+        } else {
+            divGraph.style["display"] = "none"
+        }
+        
+        divInfo.innerHTML = JSON.stringify(nodeData)
+    }
 
     return (
         <div>
             <h1>Decision Tree</h1>
-            <div style={{ width: '100vw', height: '100vh' }}>
-                <ReactFlow nodes={initialNodes} edges={initialEdges} />
+            <div style={{ width: '100vw', height: '40vh' }}>
+                <ReactFlow 
+                    nodes={initialNodes} 
+                    edges={initialEdges}
+                    onNodeClick={onNodeClick}
+                />
             </div>
-            <div>{JSON.stringify(visualizeTree["tree_nodes"])}</div>
+        
+            {/* Extended node info */}
+            <div id='extendedNodeInfo'>
+                <div>
+                    <Plot 
+                        data={[]}
+                        layout={ {title: 'Shapelet'} }
+                        divId="plot"
+                    />
+                </div>
+                <div>
+
+                </div>
+            </div>
         </div>
     );
 }
