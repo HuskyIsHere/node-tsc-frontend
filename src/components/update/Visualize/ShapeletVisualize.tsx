@@ -184,38 +184,76 @@ const ShapeletVisualize = (nodeVisualize) => {
         Plotly.react(plot, data, layout) // rerender again
     }
 
+    function focusDiv(divId) {
+        const divs = document.getElementsByClassName("focusable")
+        Array.from(divs).forEach((div, idx) => {
+            const d = document.getElementById(div.id)
+            if (divId == div.id) {
+                d.style.display = "block"
+            } else {
+                d.style.display = "none"
+            }
+        })
+    }
+
+    // config default rendering style
+    const initStyleDiscoveredShapelets = {
+        display: "block"
+    }
+    const initStyleDistanceTable = {
+        display: "none"
+    }
+
     return (
         <div>
             <h1>Discovered Shapelets</h1>
 
-            <Plot
-                data={data}
-                layout={layout}
-                divId="plot"
-            />
-
-            <div className="tableActionBar">
-                <label>Label: </label>
-                <select onChange={onLabelSelected}>                    
-                    <option value="all">all</option>
-                    { uniqueLabels.map((lb, idx) => <option value={lb} key={lb}>{lb}</option>)}
-                </select>
-                <button onClick={deselectAllRows}>Deselect All</button>
+            <div>
+                <button onClick={() => focusDiv("discoveredShapelets")}>
+                    Discovered Shapelets
+                </button>
+                <button onClick={() => focusDiv("distanceTable")}>
+                    Distance
+                </button>
             </div>
 
-            <ReactTabulator 
-                onRef={(r) => (tableRef = r)}
-                data={tableData}
-                columns={columns}
-                layout={"fitData"}
-                options={{
-                    selectable: true
-                }}
-                events={{
-                    dataFiltered: dataFiltered,
-                    rowSelectionChanged: rowSelectionChanged,
-                }}
-            />
+            <div id="discoveredShapelets" className="focusable" style={initStyleDiscoveredShapelets}>
+                <Plot
+                    data={data}
+                    layout={layout}
+                    divId="plot"
+                />
+
+                <div className="tableActionBar">
+                    <label>Label: </label>
+                    <select onChange={onLabelSelected}>                    
+                        <option value="all">all</option>
+                        { uniqueLabels.map((lb, idx) => <option value={lb} key={lb}>{lb}</option>)}
+                    </select>
+                    <button onClick={deselectAllRows}>Deselect All</button>
+                </div>
+
+                <ReactTabulator 
+                    onRef={(r) => (tableRef = r)}
+                    data={tableData}
+                    columns={columns}
+                    layout={"fitData"}
+                    options={{
+                        selectable: true
+                    }}
+                    events={{
+                        dataFiltered: dataFiltered,
+                        rowSelectionChanged: rowSelectionChanged,
+                    }}
+                />
+            </div>
+
+            <div id="distanceTable" className="focusable" style={initStyleDistanceTable}>
+                <div>
+                    This is distance table
+                </div>
+            </div>
+            
         </div>
     )
 }
