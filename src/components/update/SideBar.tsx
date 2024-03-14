@@ -1,4 +1,5 @@
 import React, { DragEvent } from 'react';
+import "../../assets/SideBar.css"
 
 const DndPanel: React.FC = () => {
   const onDragStart = (event: DragEvent, nodeType: string) => {
@@ -7,7 +8,7 @@ const DndPanel: React.FC = () => {
   };
 
   return (
-    <aside>
+    <aside className="sidebar">
       <div className="description">You can drag these nodes to the pane on the right.</div>
       <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'InputFileNode')} draggable>
         InputFile Node

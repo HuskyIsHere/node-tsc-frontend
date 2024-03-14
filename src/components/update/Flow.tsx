@@ -165,8 +165,18 @@ export const Flow: React.FC = () => {
     setNumberNode(nodes.length)
   }, [nodes, edges]);
 
+  async function getNodeInfo(nodeId) {
+		try {
+			const response = await axios.get('http://127.0.0.1:5000/project/node', { params: { nodeId } });
+			console.log('Get Node Info Successful:', response.data);
+      setSelectedNode(response.data)
+		} catch (error) {
+			console.error('Error posting data:', error);
+		}
+	}
+
   function handleOnNodeClick(event, node) : void {
-    setSelectedNode(node)
+    getNodeInfo(node.id)
   }
 
   return(
