@@ -3,6 +3,7 @@ import 'react-flow-renderer/dist/style.css';
 import dagre from '@dagrejs/dagre';
 import Plot from "react-plotly.js";
 import FocusButton from './VizComponents/FocusButton';
+import ClassificationReport from './VizComponents/ClassificationReport';
 
 
 const DecisionTreeVisualize = (nodeVisualize) => {
@@ -146,17 +147,7 @@ const DecisionTreeVisualize = (nodeVisualize) => {
                 </div>
             </div>
 
-            <div id='classificationReport' className='focusable' style={initStyleClassificationReport}>
-                <div id='report'>
-                    Classification Report
-                    {JSON.stringify(visualizeReport["report"])}
-                </div>
-
-                <div id='confusionMatrix'>
-                    Confusion Matrix
-                    {JSON.stringify(visualizeReport["confusion_matrix"])}
-                </div>
-            </div>
+            <ClassificationReport report={visualizeReport} className="focusable" />
             
         </div>
     );
