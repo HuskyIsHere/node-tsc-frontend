@@ -2,9 +2,9 @@ import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
 import { useRef } from "react";
+import FocusButton from "./VizComponents/FocusButton";
 
 const ShapeletVisualize = (nodeVisualize) => {
-
 
     const arrayRange = (start, stop) =>
         Array.from(
@@ -24,7 +24,9 @@ const ShapeletVisualize = (nodeVisualize) => {
     const labels = visualize["labels"]
     const criterion = visualize["criterion"]
     const timeseries = visualize["timeseries"]
+    const timeseriesLabels = visualize["timeseries_labels"]
     const indices = visualize["indices"]
+    const distances = visualize["transformed_data"]
 
     // BEGIN GRAPH
     const uniqueLabels = [...new Set(labels)]
@@ -130,7 +132,7 @@ const ShapeletVisualize = (nodeVisualize) => {
                             yref: 'paper',
                             x0: indices[idx][1],
                             y0: 0,
-                            x1: indices[idx][2],
+                            x1: indices[idx][2]-1,
                             y1: 1,
                             fillcolor: '#d3d3d3',
                             opacity: 0.2,
@@ -185,38 +187,85 @@ const ShapeletVisualize = (nodeVisualize) => {
         Plotly.react(plot, data, layout) // rerender again
     }
 
+    // START: DISTANCE TABLE
+    var distanceTableColumns = [{ title: "Index", field: "index" }]
+    Array.apply(null, Array(shapelets.length)).map((x, i) => { 
+        distanceTableColumns.push(
+            { title: `Shapelet ${i}`, field: `shapelet-${i}`}
+        ) 
+    })
+    distanceTableColumns.push({
+        title: "Label", field: 'label'
+    })
+    var distanceTableData = Array.apply(null, Array(distances.length)).map((x, i) => {
+        var obj = { index: i }
+        for (var k=0; k<shapelets.length; k++) {
+            obj[`shapelet-${k}`] = distances[i][k]
+        }
+        obj['label'] = timeseriesLabels[i]
+        return obj
+    })
+    console.log("label", labels)
+    // END: DISTANCE TABLE
+
+    // config default rendering style
+    const initStyleDiscoveredShapelets = {
+        display: "block"
+    }
+    const initStyleDistanceTable = {
+        display: "none"
+    }
+
     return (
         <div>
             <h1>Discovered Shapelets</h1>
 
-            <Plot
-                data={data}
-                layout={layout}
-                divId="plot"
-            />
-
-            <div id="tableActionBar">
-                <label>Label: </label>
-                <select onChange={onLabelSelected}>                    
-                    <option value="all">all</option>
-                    { uniqueLabels.map((lb, idx) => <option value={lb} key={lb}>{lb}</option>)}
-                </select>
-                <button onClick={deselectAllRows}>Deselect All</button>
+            <div>
+                <FocusButton divId="discoveredShapelets" btnText="Discovered Shapelets" />
+                <FocusButton divId="distanceTable" btnText="Distance" />
             </div>
 
-            <ReactTabulator 
-                onRef={(r) => (tableRef = r)}
-                data={tableData}
-                columns={columns}
-                layout={"fitData"}
-                options={{
-                    selectable: true
-                }}
-                events={{
-                    dataFiltered: dataFiltered,
-                    rowSelectionChanged: rowSelectionChanged,
-                }}
-            />
+            <div id="discoveredShapelets" className="focusable" style={initStyleDiscoveredShapelets}>
+                <Plot
+                    data={data}
+                    layout={layout}
+                    divId="plot"
+                />
+
+                <div className="tableActionBar">
+                    <label>Label: </label>
+                    <select onChange={onLabelSelected}>                    
+                        <option value="all">all</option>
+                        { uniqueLabels.map((lb, idx) => <option value={lb} key={lb}>{lb}</option>)}
+                    </select>
+                    <button onClick={deselectAllRows}>Deselect All</button>
+                </div>
+
+                <ReactTabulator 
+                    onRef={(r) => (tableRef = r)}
+                    data={tableData}
+                    columns={columns}
+                    layout={"fitData"}
+                    options={{
+                        selectable: true
+                    }}
+                    events={{
+                        dataFiltered: dataFiltered,
+                        rowSelectionChanged: rowSelectionChanged,
+                    }}
+                />
+            </div>
+
+            <div id="distanceTable" className="focusable" style={initStyleDistanceTable}>
+                <div>
+                    <ReactTabulator 
+                        data={distanceTableData}
+                        columns={distanceTableColumns}
+                        layout={"fitdata"}
+                    />
+                </div>
+            </div>
+            
         </div>
     )
 }
