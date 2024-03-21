@@ -2,6 +2,7 @@ import ReactFlow from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import dagre from '@dagrejs/dagre';
 import Plot from "react-plotly.js";
+import FocusButton from './VizComponents/FocusButton';
 
 
 const DecisionTreeVisualize = (nodeVisualize) => {
@@ -104,18 +105,6 @@ const DecisionTreeVisualize = (nodeVisualize) => {
         divInfo.innerHTML = JSON.stringify(nodeData)
     }
 
-    function focusDiv(divId) {
-        const divs = document.getElementsByClassName("focusable")
-        Array.from(divs).forEach((div, idx) => {
-            const d = document.getElementById(div.id)
-            if (divId == div.id) {
-                d.style.display = "block"
-            } else {
-                d.style.display = "none"
-            }
-        })
-    }
-
     // config default rendering style
     const initStyleTreeRules = {
         display: "block"
@@ -129,13 +118,8 @@ const DecisionTreeVisualize = (nodeVisualize) => {
             <h1>Decision Tree</h1>
 
             <div>
-                <button onClick={() => focusDiv('treeRules')}>
-                    Tree Rules
-                </button>
-
-                <button onClick={() => focusDiv('classificationReport')}>
-                    Report
-                </button>
+                <FocusButton divId="treeRules" btnText="Tree Rules" />
+                <FocusButton divId="classificationReport" btnText="Report" />
             </div>
 
             <div id="treeRules" className='focusable' style={initStyleTreeRules}>

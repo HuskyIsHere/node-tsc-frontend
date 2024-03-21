@@ -2,6 +2,7 @@ import Plot from "react-plotly.js";
 import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
 import { useRef } from "react";
+import FocusButton from "./VizComponents/FocusButton";
 
 const ShapeletVisualize = (nodeVisualize) => {
 
@@ -23,6 +24,7 @@ const ShapeletVisualize = (nodeVisualize) => {
     const labels = visualize["labels"]
     const criterion = visualize["criterion"]
     const timeseries = visualize["timeseries"]
+    const timeseriesLabels = visualize["timeseries_labels"]
     const indices = visualize["indices"]
     const distances = visualize["transformed_data"]
 
@@ -192,27 +194,19 @@ const ShapeletVisualize = (nodeVisualize) => {
             { title: `Shapelet ${i}`, field: `shapelet-${i}`}
         ) 
     })
+    distanceTableColumns.push({
+        title: "Label", field: 'label'
+    })
     var distanceTableData = Array.apply(null, Array(distances.length)).map((x, i) => {
         var obj = { index: i }
         for (var k=0; k<shapelets.length; k++) {
             obj[`shapelet-${k}`] = distances[i][k]
         }
+        obj['label'] = timeseriesLabels[i]
         return obj
     })
-    console.log(distanceTableData)
+    console.log("label", labels)
     // END: DISTANCE TABLE
-
-    function focusDiv(divId) {
-        const divs = document.getElementsByClassName("focusable")
-        Array.from(divs).forEach((div, idx) => {
-            const d = document.getElementById(div.id)
-            if (divId == div.id) {
-                d.style.display = "block"
-            } else {
-                d.style.display = "none"
-            }
-        })
-    }
 
     // config default rendering style
     const initStyleDiscoveredShapelets = {
@@ -227,12 +221,8 @@ const ShapeletVisualize = (nodeVisualize) => {
             <h1>Discovered Shapelets</h1>
 
             <div>
-                <button onClick={() => focusDiv("discoveredShapelets")}>
-                    Discovered Shapelets
-                </button>
-                <button onClick={() => focusDiv("distanceTable")}>
-                    Distance
-                </button>
+                <FocusButton divId="discoveredShapelets" btnText="Discovered Shapelets" />
+                <FocusButton divId="distanceTable" btnText="Distance" />
             </div>
 
             <div id="discoveredShapelets" className="focusable" style={initStyleDiscoveredShapelets}>

@@ -3,14 +3,13 @@ import 'react-tabulator/lib/styles.css';
 import { chartFormatter } from '@/scripts/chartFormatter.js'
 import { ReactTabulator } from 'react-tabulator'
 import { useRef } from "react";
+import FocusButton from "./VizComponents/FocusButton";
 
 const ExplorationVisualize = (nodeVisualize) => {
 
     const visualizeData = nodeVisualize.nodeVisualize["data"]
     const visualizeMetaData = nodeVisualize.nodeVisualize["meta"]
     const visualizeLabelDist = nodeVisualize.nodeVisualize["label_distribution"]
-
-    console.log(visualizeData)
 
     var numberOfTimeseries = visualizeData["data"].length
     var colTypes = visualizeData["col_type"]
@@ -87,18 +86,6 @@ const ExplorationVisualize = (nodeVisualize) => {
     }
     // END TIME SERIES TABLE
 
-    function focusDiv(divId) {
-        const divs = document.getElementsByClassName("focusable")
-        Array.from(divs).forEach((div, idx) => {
-            const d = document.getElementById(div.id)
-            if (divId == div.id) {
-                d.style.display = "block"
-            } else {
-                d.style.display = "none"
-            }
-        })
-    }
-
     // config default rendering style
     const initStyleColTypeTable = {
         display: "block"
@@ -122,16 +109,12 @@ const ExplorationVisualize = (nodeVisualize) => {
             <div>Total number of timeseries: {numberOfTimeseries}</div>
 
             <div>
-                <button onClick={() => focusDiv("colTypeTable")}>
-                    Column Types
-                </button>
-
-                {visualizeData && visualizeMetaData && 
-                <button onClick={() => focusDiv("timeSeriesTable")}>Time Series</button>
+                <FocusButton divId="colTypeTable" btnText="Column Types" />
+                {visualizeData && visualizeMetaData &&
+                <FocusButton divId="timeSeriesTable" btnText="Time Series" />
                 }
-
-                {visualizeMetaData && visualizeLabelDist &&
-                <button onClick={() => focusDiv("timeSeriesDistPlot")}>Label Distribution</button>
+                {visualizeLabelDist && visualizeMetaData &&
+                <FocusButton divId="timeSeriesDistPlot" btnText="Label Distribution" />
                 }
             </div>
 
@@ -155,7 +138,7 @@ const ExplorationVisualize = (nodeVisualize) => {
                     onRef={(r) => (colTypeTableRef = r)}
                     data = {colTypeTableData}
                     columns={colTypeTableColumns}
-                    layout={"fitdata"}
+                    layout={"fitData"}
                     options={{
                         rowFormatter:function(row) {
                             // TODO: add formatter for exclude columns
@@ -175,7 +158,7 @@ const ExplorationVisualize = (nodeVisualize) => {
                 <ReactTabulator 
                     data={timeSeriesTableData}
                     columns={timeSeriesTableColumns}
-                    layout={"fitdata"}
+                    layout={"fitData"}
                 />
             </div>
             }
