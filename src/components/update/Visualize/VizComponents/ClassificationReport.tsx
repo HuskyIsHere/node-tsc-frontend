@@ -39,31 +39,33 @@ const ClassificationReport = (props) => {
 
     // START PLOT: CONFUSION MATRIX
     var colorscaleValue = [
-        [0, '#003980'],
-        [1, '#FFFFFF']
-      ];
+        [0, '#FFFFFF'],
+        [1, '#003980']
+    ];
+    var labels = confusion_matrix.labels.map((x) => 'label: '+x.toString())
+    console.log(confusion_matrix.heatmap)
     var reportData = [
         {
-          z: confusion_matrix,
-          type: 'heatmap',
-          colorscale: colorscaleValue,
+            x: labels,
+            y: labels,
+            z: confusion_matrix.heatmap,
+            type: 'heatmap',
+            colorscale: colorscaleValue,
         }
-      ];
+    ];
     var reportPlotLayout = {
         title: "Confusion Matrix",
         yaxis: {
-            title: "True"
+            title: "True",
+            autorange: "reversed",
         },
         xaxis: {
-            title: "Pred"
+            title: "Pred",
         }
     }
 
     // TODO: Add number annotation
-    // TODO: xtick and ytick as class laebel
-    // TODO: add axis title
     
-
     // END PLOT: CONFUSION MATRIX
 
     return (
