@@ -8,6 +8,8 @@ const DecisionTreeVisualize = (nodeVisualize) => {
 
     const visualizeTree = nodeVisualize.nodeVisualize["tree_rules"]
     const visualizeShapelet = nodeVisualize.nodeVisualize["shapelet_transformation"]
+    const visualizeReport = nodeVisualize.nodeVisualize["score"]
+    console.log(visualizeReport)
 
     const nodeWidth = 172;
     const nodeHeight = 36;
@@ -76,8 +78,10 @@ const DecisionTreeVisualize = (nodeVisualize) => {
         const divGraph = div.childNodes[0]
         const divInfo = div.childNodes[1]
 
+        div.style.display = 'block'
+
         if (nodeData["feature"] != null) {
-            divGraph.style["display"] = "block"
+            divGraph.style.display = "block"
 
             var sl = visualizeShapelet["shapelets"][nodeData["feature"]]
             var shapeletData = {
@@ -100,30 +104,76 @@ const DecisionTreeVisualize = (nodeVisualize) => {
         divInfo.innerHTML = JSON.stringify(nodeData)
     }
 
+    function focusDiv(divId) {
+        const divs = document.getElementsByClassName("focusable")
+        Array.from(divs).forEach((div, idx) => {
+            const d = document.getElementById(div.id)
+            if (divId == div.id) {
+                d.style.display = "block"
+            } else {
+                d.style.display = "none"
+            }
+        })
+    }
+
+    // config default rendering style
+    const initStyleTreeRules = {
+        display: "block"
+    }
+    const initStyleClassificationReport = {
+        display: "none"
+    }
+
     return (
         <div>
             <h1>Decision Tree</h1>
-            <div style={{ width: '100vw', height: '40vh' }}>
-                <ReactFlow 
-                    nodes={initialNodes} 
-                    edges={initialEdges}
-                    onNodeClick={onNodeClick}
-                />
+
+            <div>
+                <button onClick={() => focusDiv('treeRules')}>
+                    Tree Rules
+                </button>
+
+                <button onClick={() => focusDiv('classificationReport')}>
+                    Report
+                </button>
             </div>
-        
-            {/* Extended node info */}
-            <div id='extendedNodeInfo'>
-                <div>
-                    <Plot 
-                        data={[]}
-                        layout={ {title: 'Shapelet'} }
-                        divId="plot"
+
+            <div id="treeRules" className='focusable' style={initStyleTreeRules}>
+                <div style={{ width: '100vw', height: '40vh' }}>
+                    <ReactFlow 
+                        nodes={initialNodes} 
+                        edges={initialEdges}
+                        onNodeClick={onNodeClick}
                     />
                 </div>
-                <div>
+            
+                {/* Extended node info */}
+                <div id='extendedNodeInfo' style={ {display: 'None'} }>
+                    <div>
+                        <Plot 
+                            data={[]}
+                            layout={ {title: 'Shapelet'} }
+                            divId="plot"
+                        />
+                    </div>
+                    <div>
 
+                    </div>
                 </div>
             </div>
+
+            <div id='classificationReport' className='focusable' style={initStyleClassificationReport}>
+                <div id='report'>
+                    Classification Report
+                    {JSON.stringify(visualizeReport["report"])}
+                </div>
+
+                <div id='confusionMatrix'>
+                    Confusion Matrix
+                    {JSON.stringify(visualizeReport["confusion_matrix"])}
+                </div>
+            </div>
+            
         </div>
     );
 }
