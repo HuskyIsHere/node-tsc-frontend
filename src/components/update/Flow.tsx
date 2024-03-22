@@ -21,6 +21,7 @@ import InputFileNode from './Node/InputFileNode';
 import InputNode from './Node/InputNode';
 import PrepNode from './Node/PrepNode';
 import ApplyModelNode from './Node/ApplyModelNode';
+import ApplyTransformerNode from './Node/ApplyTransformerNode';
 import ShapeletTransformNode from './Node/ShapeletTransformNode';
 import DecisionTreeNode from './Node/DecisionTreeNode';
 
@@ -29,6 +30,7 @@ const nodeTypes = {
   InputNode: InputNode,
   PrepNode: PrepNode,
   ApplyModelNode: ApplyModelNode,
+  ApplyTransformerNode: ApplyTransformerNode,
   ShapeletTransformNode: ShapeletTransformNode,
   DecisionTreeNode: DecisionTreeNode
 };

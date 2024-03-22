@@ -3,12 +3,12 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import axios from "axios";
 import "../../../assets/Node.css";
 
-const ApplyModelNode = ({ isConnectable, id, data }: NodeProps) => {
+const ApplyTransformerNode = ({ isConnectable, id, data }: NodeProps) => {
 
     const postData = {
-        "node-type": "APPLY_MODEL",
+        "node-type": "APPLY_TRANSFORMER",
         "id": id,
-        "name": "ApplyModel (DT)",
+        "name": "ApplyModel (ST)",
         "kwargs": {
 
         },
@@ -43,7 +43,7 @@ const ApplyModelNode = ({ isConnectable, id, data }: NodeProps) => {
             <Handle type="target" position={Position.Top} id="input1" style={{ right: 35, left: 'auto' }} isConnectable={isConnectable} />
             <Handle type="target" position={Position.Top} id="input2" style={{ left: 40 }} isConnectable={isConnectable} />
             <div>
-                <p>Apply Model Node</p>
+                <p>Apply Transformer Node</p>
             </div>
             <Handle
             type="source"
@@ -55,4 +55,4 @@ const ApplyModelNode = ({ isConnectable, id, data }: NodeProps) => {
 
 };
 
-export default memo(ApplyModelNode);
+export default memo(ApplyTransformerNode);
