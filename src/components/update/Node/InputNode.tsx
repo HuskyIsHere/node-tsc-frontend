@@ -52,8 +52,14 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         position={Position.Top}
         isConnectable={isConnectable}
       />
+        <div className="handler-label">
+          <p>DATA</p>
+        </div>
         <div className="custom-node__header">
           Input Node
+        </div>
+        <div className="handler-label">
+          <p>DATA</p>
         </div>
       <Handle
         type="source"

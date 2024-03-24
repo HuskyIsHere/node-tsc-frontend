@@ -38,14 +38,31 @@
   border-radius: 3px;
   color: #222;
   font-size: 12px;
-  padding: 10px;
+  /* padding: 10px; */
   text-align: center;
   width: 125px;
 }
 
-.custom-node__header {
-  padding: 8px 10px;
-  border-bottom: 1px solid #e2e8f0;
+.custom-node__input p{
+  padding: 0;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+/* .custom-node__header {
+  padding: 3px 5px;
+} */
+
+.handler-label p {
+  font-weight: 100; 
+  font-size: 7px; 
+  padding: 0;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.handler-label {
+  text-align: center;
 }
 
 .custom-node__select {

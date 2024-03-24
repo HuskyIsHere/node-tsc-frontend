@@ -46,8 +46,14 @@ const PrepNode = ({ isConnectable, id, data }: NodeProps) => {
     return (
         <div className="custom-node__input">
             <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
+            <div className="handler-label">
+                <p>DATA</p>
+            </div>
             <div>
                 <p>Prep Node</p>
+            </div>
+            <div className="handler-label">
+                <p>DATA</p>
             </div>
             {/* <select id="selectOption">
             {choice.map((option, index) => (

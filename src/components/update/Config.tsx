@@ -8,6 +8,7 @@ interface ConfigProps {
 }
 
 export const Config: React.FC<ConfigProps> = ({ data }) => {
+	let [disableVisualizeButton, setDisableVisualizeButton] = useState(true)
 	const [nodeConfig, setNodeConfig] = useState<any[]>([]);
 	const [updateData, setUpdateData] = useState<any>();
   const prepOptions = [
@@ -82,6 +83,9 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 							updateData
 					);
 					console.log("Update node successful:", response.data);
+					if (response.status === 200) {
+						setDisableVisualizeButton(true);
+					}
 			} catch (error) {
 					console.error("Error posting data:", error);
 			}
@@ -94,6 +98,9 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 		try {
 			const response = await axios.get('http://127.0.0.1:5000/project/execute');
 			console.log('Response:', response.data);
+			if (response.status === 200) {
+				setDisableVisualizeButton(false);
+			}
 		} catch (error) {
 			console.error('Error:', error);
 		}
@@ -365,7 +372,9 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			{updateData && renderKwargs()}
 			<button onClick={updateConfig}>Update</button>
 			<button onClick={handleExecute}>Execute</button>
-			<button onClick={handleVisualization}>Visualize</button>
+			{!disableVisualizeButton && (
+				<button onClick={handleVisualization}>Visualize</button>
+			)}
     </div>
   );
 };

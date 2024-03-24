@@ -42,8 +42,19 @@ const ApplyModelNode = ({ isConnectable, id, data }: NodeProps) => {
         <div className="custom-node__input" onClick={showParameter}>
             <Handle type="target" position={Position.Top} id="input1" style={{ right: 35, left: 'auto' }} isConnectable={isConnectable} />
             <Handle type="target" position={Position.Top} id="input2" style={{ left: 40 }} isConnectable={isConnectable} />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div className="handler-label" style={{ marginRight: '20px' }}>
+                <p>DATA</p>
+            </div>
+            <div className="handler-label">
+                <p>MODEL</p>
+            </div>
+            </div>
             <div>
                 <p>Apply Model Node</p>
+            </div>
+            <div className="handler-label">
+                <p>DATA</p>
             </div>
             <Handle
             type="source"

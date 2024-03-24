@@ -42,8 +42,14 @@ const ShapeletTransformNode = ({ isConnectable, id, data }: NodeProps) => {
     return(
         <div className="custom-node__input">
             <Handle type="target" position={Position.Top} isConnectable={isConnectable}/>
+            <div className="handler-label">
+                <p>DATA</p>
+            </div>
             <div>
                 <p>Shapelet Transform Node</p>
+            </div>
+            <div className="handler-label">
+                <p>MODEL</p>
             </div>
             <Handle type="source" position={Position.Bottom} isConnectable={isConnectable}/>
         </div>
