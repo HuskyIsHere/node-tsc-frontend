@@ -123,7 +123,6 @@ const ShapeletVisualize = (nodeVisualize) => {
                 Plotly.react(plot, dataTimeSeries[idx], { 
                     title: `Shapelet ${idx} (label: ${labels[idx]})`,
                     shapes: [
-                        // 1st highlight during Feb 4 - Feb 6
                         {
                             type: 'rect',
                             // x-reference is assigned to the x-values
