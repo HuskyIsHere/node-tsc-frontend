@@ -177,7 +177,6 @@ const DecisionTreeVisualize = (props) => {
             
             <div id='predictedLabels' className='focusable' style={ initPredictTable }>
                 <div>
-                    <div>this</div>
                     <ReactTabulator 
                         data={predictTableData}
                         columns={predictTableColumns}

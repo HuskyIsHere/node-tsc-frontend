@@ -176,7 +176,6 @@ const KnnVisualize = (props) => {
         
             <div id='predictedLabels' className='focusable'>
                 <div>
-                    <div>this</div>
                     <ReactTabulator 
                         data={predictTableData}
                         columns={predictTableColumns}
