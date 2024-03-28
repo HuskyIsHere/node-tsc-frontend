@@ -3,6 +3,8 @@ import ShapeletVisualize from '@/components/update/Visualize/ShapeletVisualize';
 import DecisionTreeVisualize from '@/components/update/Visualize/DecisionTreeVisualize';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import KnnVisualize from '@/components/update/Visualize/KnnVisualize';
+import ApplyVisualize from '@/components/update/Visualize/ApplyVisualize';
 
 export const Visualization: React.FC = () => {
 
@@ -56,9 +58,13 @@ export const Visualization: React.FC = () => {
       <p>Welcome to visualization</p>
       <p>nodeId = {nodeId}</p>
       {nodeInfo && <p>nodeType = {nodeInfo["type"]}</p>}
-      {nodeVisualize && nodeInfo["type"] == "ShapeletTransformNode" && <ShapeletVisualize nodeVisualize={nodeVisualize}/>}
+      {nodeVisualize && nodeInfo["type"] == "ShapeletTransformNode" && <ShapeletVisualize props={nodeVisualize}/>}
       {nodeVisualize && (nodeInfo["type"] == "InputNode" || nodeInfo["type"] == "PrepNode") && <ExplorationVisualize nodeVisualize={nodeVisualize}/>}
-      {nodeVisualize && nodeInfo["type"] == "DecisionTreeNode" && <DecisionTreeVisualize nodeVisualize={nodeVisualize}/>}
+      {nodeVisualize && nodeInfo["type"] == "DecisionTreeNode" && <DecisionTreeVisualize props={nodeVisualize}/>}
+      {nodeVisualize && nodeInfo["type"] == "KnnNode" && <KnnVisualize props={nodeVisualize} />} 
+      {nodeVisualize && (nodeInfo["type"] == "ApplyTransformerNode" || nodeInfo["type"] == "ApplyModelNode") && 
+        <ApplyVisualize props={nodeVisualize} />
+      }
     </div>
   );
 };
