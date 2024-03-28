@@ -31,6 +31,9 @@ const DndPanel: React.FC = () => {
       <div className="dndnode" onDragStart={(event) => onDragStart(event, 'DecisionTreeNode')} draggable>
         Decision Tree Node
       </div>
+      <div className="dndnode" onDragStart={(event) => onDragStart(event, 'KnnNode')} draggable>
+        KNN Node
+      </div>
     </aside>
   );
 };

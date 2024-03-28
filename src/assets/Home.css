@@ -2,6 +2,8 @@
   text-align: center;
   margin-top: 75px;
   margin-right: 2%;
+  max-height: 90vh; /* Set the maximum height to the viewport height */
+  overflow-y: auto; /* Allow vertical scrolling if necessary */
 }
 
 .home h1 {

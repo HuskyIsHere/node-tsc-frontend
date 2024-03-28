@@ -55,10 +55,18 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					"n_jobs":-1,
 					"remove_similar":true
 			}
+		},
+		KnnNode: {
+			"id" : "",
+			"name": "knn",
+			"kwargs": {
+				"n_neighbors": 5
+			}
 		}
 	}
 
-	useEffect(() => {		
+	useEffect(() => {	
+		console.log(data?.type)
     // Initialize node config when data.type changes
     if (data?.type && updateForm[data.type]) {
 			console.log(data);
@@ -68,7 +76,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
         key,
         value
       })));
-    }
+	}
   }, [data]);
 
 	function updateConfig(): void {
@@ -333,8 +341,343 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					}}
 					/>
 				</div>
+				<div className="input-container">
+					<label>Cost-Complexity Pruning:</label>
+					<input
+						type="number"
+						step="any"
+						value={updateData?.kwargs?.["ccp_alpha"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											ccp_alpha: parseInt(newValue) 
+									}
+							}));
+						}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Classification Weight:</label>
+					<input
+						type="text"
+						value={updateData?.kwargs?.["class_weight"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											class_weight: parseInt(newValue) 
+									}
+							}));
+						}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Criterion:</label>
+					<select id="sort-boolean-select" 
+					value={updateData?.kwargs?.["criterion"]}
+					onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									criterion: newValue
+							}
+						}));
+					}}>
+						<option value="gini">Gini</option>
+						<option value="Entropy">Entropy</option>
+						<option value="log_loss">Log Loss</option>
+					</select>
+				</div>
+				<div className="input-container">
+					<label>Max Features:</label>
+					<input
+						type="text"
+						value={updateData?.kwargs?.["max_features"]}
+						onChange={(e) => {
+							const newValue = e.target.value.trim();
+							// Validate input
+							if (/^\d+$/.test(newValue)) {
+							// If input is an integer
+							setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+								...prevData.kwargs,
+								max_features: parseInt(newValue)
+								}
+							}));
+							} else if (/^\d*\.\d+$/.test(newValue)) {
+							// If input is a float
+							setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+								...prevData.kwargs,
+								max_features: parseFloat(newValue)
+								}
+							}));
+							} else if (newValue === "sqrt" || newValue === "log2") {
+							// If input is "sqrt" or "log2"
+							setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+								...prevData.kwargs,
+								max_features: newValue
+								}
+							}));
+							}
+						}}
+						/>
+				</div>
+				<div className="input-container">
+					<label>Max Leaf Nodes:</label>
+					<input
+						type="number"
+						value={updateData?.kwargs?.["max_leaf_nodes"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											max_depth: parseInt(newValue) 
+									}
+							}));
+					}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Min Impurity Decrease:</label>
+					<input
+						type="number"
+						value={updateData?.kwargs?.["min_impurity_decrease"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											min_impurity_decrease: parseFloat(newValue) 
+									}
+							}));
+					}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Min Sample Leaf:</label>
+					<input
+						type="number"
+						id="min-sample-leaf"
+						value={updateData?.kwargs?.["min_samples_leaf"]}
+						onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+							...prevData,
+							kwargs: {
+							...prevData.kwargs,
+							min_samples_leaf: newValue === "" ? "" : parseFloat(newValue)
+							}
+						}));
+						}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Min Sample Split:</label>
+					<input
+						type="number"
+						id="min-sample-leaf"
+						value={updateData?.kwargs?.["min_samples_split"]}
+						onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+							...prevData,
+							kwargs: {
+							...prevData.kwargs,
+							min_samples_split: newValue === "" ? "" : parseFloat(newValue)
+							}
+						}));
+						}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Min Weight Fraction Leaf:</label>
+					<input
+						type="number"
+						id="min-sample-leaf"
+						value={updateData?.kwargs?.["min_weight_fraction_leaf"]}
+						onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+							...prevData,
+							kwargs: {
+							...prevData.kwargs,
+							min_weight_fraction_leaf: parseFloat(newValue)
+							}
+						}));
+						}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Random State:</label>
+				</div>
+				<div className="input-container">
+					<label>Splitter:</label>
+					<select id="sort-boolean-select" 
+					value={updateData?.kwargs?.["splitter"]}
+					onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									splitter: newValue
+							}
+						}));
+					}}>
+						<option value="best">Best</option>
+						<option value="random">Random</option>
+					</select>
+				</div>
 			</div>
 		)
+	}
+
+	function renderKwargsKnn(){
+		return(
+			<div className='kwagrs-style'>
+				<h3>KNN Node</h3>
+				<div className="input-container">
+					<label>Algorithm:</label>
+					<select id="sort-boolean-select" 
+					value={updateData?.kwargs?.["algorithm"]}
+					onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									algorithm: newValue
+							}
+						}));
+					}}>
+						<option value="auto">Auto</option>
+						<option value="ball_tree">Ball Tree</option>
+						<option value="kd_tree">kd Tree</option>
+						<option value="brute">Brute</option>
+					</select>
+				</div>
+				<div className="input-container">
+					<label>Leaf Size:</label>
+					<input
+						type="number"
+						value={updateData?.kwargs?.["leaf_size"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											leaf_size: parseInt(newValue) 
+									}
+							}));
+					}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Metric:</label>
+					<select id="sort-boolean-select" 
+					value={updateData?.kwargs?.["metric"]}
+					onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									metric: newValue
+							}
+						}));
+					}}>
+						<option value="minkowski">Minkowski</option>
+						<option value="precomputed">Precomputed</option>
+					</select>
+				</div>
+				<div className="input-container">
+					<label>Metric Parameters:</label>
+					<input
+						type="text"
+						value={updateData?.kwargs?.["metric_params"]}
+						onChange={(e) => {
+						const newValue = e.target.value;
+						const parsedValues = newValue.split(',').map(val => parseInt(val.trim()));
+						setUpdateData(prevData => ({
+							...prevData,
+							kwargs: {
+							...prevData.kwargs,
+							metric_params: parsedValues
+							}
+						}));
+						}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Number of Jobs:</label>
+					<input
+						type="number"
+						value={updateData?.kwargs?.["n_jobs"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											n_jobs: parseInt(newValue) 
+									}
+							}));
+					}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Power parameter:</label>
+					<input
+						type="float"
+						value={updateData?.kwargs?.["p"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											p: parseFloat(newValue) 
+									}
+							}));
+					}}
+					/>
+				</div>
+				<div className="input-container">
+					<label>Weights:</label>
+					<select id="sort-boolean-select" 
+					value={updateData?.kwargs?.["weights"]}
+					onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									weights: newValue
+							}
+						}));
+					}}>
+						<option value="uniform">Uniform</option>
+						<option value="distance">Distance</option>
+					</select>
+				</div>
+			</div>
+		);
 	}
 
 	function renderKwargs() {
@@ -359,6 +702,10 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					) : data?.type === "DecisionTreeNode" ? (
 						<div> 
 							{renderKwargsDecisionTree()}
+						</div>
+					) : data?.type === "KnnNode" ? (
+						<div> 
+							{renderKwargsKnn()}
 						</div>
 					) : (
 						<h3>Please Select Node</h3>
