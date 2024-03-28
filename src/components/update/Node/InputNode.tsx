@@ -11,7 +11,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         "id": id,
         "name": "TrainInput",
         "kwargs": {
-          "source": "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TRAIN.arff",
+          "source": localStorage.getItem("Train"),
           "source_type": "arff",
         },
       };

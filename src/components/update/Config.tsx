@@ -133,6 +133,8 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 							...prevData,
 							name: newValue
 					}));
+					setUpdateData(prevData => ({
+						...prevData, kwargs: { ...prevData.kwargs, source: localStorage.getItem(newValue) }}))
 				}}>
 					<option value="">Select an option</option>
 					{inputOptions.map(option => (

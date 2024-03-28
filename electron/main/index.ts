@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -50,12 +50,16 @@ async function createWindow() {
     title: 'Main window',
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
-        nodeIntegration: false,
+      preload: preload
     },
     width: 1600,
     height: 950,
     backgroundColor: "#ffffff"
   })
+
+  ipcMain.handle('showOpenDialog', async () => {
+    return await dialog.showOpenDialog();
+  });
 
   if (url) { // electron-vite-vue#298
     win.loadURL(url)

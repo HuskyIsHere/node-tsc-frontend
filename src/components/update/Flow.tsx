@@ -196,7 +196,9 @@ export const Flow: React.FC = () => {
   }
 
   function handleOnNodeClick(event, node): void {
-    getNodeInfo(node.id);
+    if(node.type != "InputFileNode"){
+      getNodeInfo(node.id);
+    }
   }
 
   return (
