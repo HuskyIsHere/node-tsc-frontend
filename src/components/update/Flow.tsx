@@ -38,6 +38,8 @@ const nodeTypes = {
 };
 
 export const Flow: React.FC = () => {
+  localStorage.setItem("TrainInput", "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TRAIN.arff");
+  localStorage.setItem("TestInput", "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TEST.arff");
   let id = 0;
   const getId = () => uuidv4();
   const [numberNode, setNumberNode] = useState(0);
