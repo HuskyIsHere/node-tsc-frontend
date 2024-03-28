@@ -4,7 +4,7 @@ import { ReactTabulator } from 'react-tabulator'
 import { useRef } from "react";
 import FocusButton from "./VizComponents/FocusButton";
 
-const ShapeletVisualize = (nodeVisualize) => {
+const ShapeletVisualize = (props) => {
 
     const arrayRange = (start, stop) =>
         Array.from(
@@ -12,21 +12,26 @@ const ShapeletVisualize = (nodeVisualize) => {
             (_, index) => start + index
     );
 
-    const visualize = nodeVisualize.nodeVisualize["shapelet_transformation"]
+    const visualize = props.props["shapelet_transformation"]
+    const transformedData = props.props["transformed_data"]
+    const transformer = props.props["model"]
 
     var tableRef = useRef();
 
     var data = new Array() // shapelets
     var dataTimeSeries = new Object() // object of time series
 
+    // shapelet transoformer for shapelet visualization
     const shapelets = visualize["shapelets"]
     const scores = visualize["scores"]
     const labels = visualize["labels"]
     const criterion = visualize["criterion"]
     const timeseries = visualize["timeseries"]
-    const timeseriesLabels = visualize["timeseries_labels"]
     const indices = visualize["indices"]
-    const distances = visualize["transformed_data"]
+
+    // transformed data
+    const distances = transformedData["transformed_data"]
+    const timeseriesLabels = transformedData["timeseries_labels"]
 
     // BEGIN GRAPH
     const uniqueLabels = [...new Set(labels)]

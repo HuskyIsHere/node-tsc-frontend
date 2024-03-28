@@ -4,14 +4,18 @@ import dagre from '@dagrejs/dagre';
 import Plot from "react-plotly.js";
 import FocusButton from './VizComponents/FocusButton';
 import ClassificationReport from './VizComponents/ClassificationReport';
+import { ReactTabulator } from 'react-tabulator';
 
 
-const DecisionTreeVisualize = (nodeVisualize) => {
+const DecisionTreeVisualize = (props) => {
 
-    const visualizeTree = nodeVisualize.nodeVisualize["tree_rules"]
-    const visualizeShapelet = nodeVisualize.nodeVisualize["shapelet_transformation"]
-    const visualizeReport = nodeVisualize.nodeVisualize["score"]
-    console.log(visualizeReport)
+    const visualizeTree = props.props["tree_rules"]
+    const visualizeShapelet = props.props["shapelet_transformation"]
+    const visualizeReport = props.props["score"]
+    const predictedLabels = props.props["predicted_labels"]
+    const actualLabels = props.props["actual_labels"]
+
+    console.log("labels", predictedLabels, actualLabels)
 
     const nodeWidth = 172;
     const nodeHeight = 36;
@@ -105,12 +109,33 @@ const DecisionTreeVisualize = (nodeVisualize) => {
         
         divInfo.innerHTML = JSON.stringify(nodeData)
     }
+    // END EXTENDED NODE INFO
+
+    // START: PREDICT TABLE
+    var predictTableColumns = [
+        { title: "Index", field: "index" },
+        { title: "Actial Label", field: "actual"},
+        { title: "Predict Label", field: "predict"},
+    ]
+    var predictTableData = []
+    for(var idx=0; idx<predictedLabels.length; idx++) {
+        predictTableData.push({
+            index: idx,
+            actual: actualLabels[idx],
+            predict: predictedLabels[idx]
+        })
+    }
+    console.log(predictTableColumns, predictTableData)
+    // END: PREDICT TABLE
 
     // config default rendering style
     const initStyleTreeRules = {
         display: "block"
     }
     const initStyleClassificationReport = {
+        display: "none"
+    }
+    const initPredictTable = {
         display: "none"
     }
 
@@ -121,6 +146,7 @@ const DecisionTreeVisualize = (nodeVisualize) => {
             <div>
                 <FocusButton divId="treeRules" btnText="Tree Rules" />
                 <FocusButton divId="classificationReport" btnText="Report" />
+                <FocusButton divId="predictedLabels" btnText="Predict" />
             </div>
 
             <div id="treeRules" className='focusable' style={initStyleTreeRules}>
@@ -149,6 +175,16 @@ const DecisionTreeVisualize = (nodeVisualize) => {
 
             <ClassificationReport report={visualizeReport} className="focusable" />
             
+            <div id='predictedLabels' className='focusable' style={ initPredictTable }>
+                <div>
+                    <div>this</div>
+                    <ReactTabulator 
+                        data={predictTableData}
+                        columns={predictTableColumns}
+                        layout={"fitData"}
+                    />
+                </div>
+            </div>
         </div>
     );
 }
