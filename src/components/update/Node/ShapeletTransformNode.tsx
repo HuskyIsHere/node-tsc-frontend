@@ -49,7 +49,7 @@ const ShapeletTransformNode = ({ isConnectable, id, data }: NodeProps) => {
                 <p>Shapelet Transform Node</p>
             </div>
             <div className="handler-label">
-                <p>MODEL</p>
+                <p>MODEL / DATA</p>
             </div>
             <Handle type="source" position={Position.Bottom} isConnectable={isConnectable}/>
         </div>

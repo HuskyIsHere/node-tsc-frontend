@@ -8,7 +8,7 @@
   font-weight: 400;
 
   /* color-scheme: light dark; */
-  color: rgba(255, 255, 255, 0.87);
+  /* color: rgba(255, 255, 255, 0.87); */
   background-color: #1B1A55;
 
   font-synthesis: none;
@@ -36,8 +36,13 @@ a:hover {
 } */
 
 h1 {
+  color: white;
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+label {
+  color: white;
 }
 
 button {
