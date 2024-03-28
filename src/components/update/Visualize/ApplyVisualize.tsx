@@ -1,4 +1,5 @@
 import DecisionTreeVisualize from "./DecisionTreeVisualize";
+import KnnVisualize from "./KnnVisualize";
 import ShapeletVisualize from "./ShapeletVisualize";
 
 const ApplyVisualize = (props) => {
@@ -17,6 +18,9 @@ const ApplyVisualize = (props) => {
             }
             { model["type"] == "DecisionTreeNode" && 
                 <DecisionTreeVisualize props={sent_props} />
+            }
+            { model["type"] == "KnnNode" && 
+                <KnnVisualize props={sent_props} />
             }
         </div>
     )

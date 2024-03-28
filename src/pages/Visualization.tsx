@@ -61,7 +61,7 @@ export const Visualization: React.FC = () => {
       {nodeVisualize && nodeInfo["type"] == "ShapeletTransformNode" && <ShapeletVisualize props={nodeVisualize}/>}
       {nodeVisualize && (nodeInfo["type"] == "InputNode" || nodeInfo["type"] == "PrepNode") && <ExplorationVisualize nodeVisualize={nodeVisualize}/>}
       {nodeVisualize && nodeInfo["type"] == "DecisionTreeNode" && <DecisionTreeVisualize props={nodeVisualize}/>}
-      {nodeVisualize && nodeInfo["type"] == "KnnNode" && <KnnVisualize nodeVisualize={nodeVisualize} />} 
+      {nodeVisualize && nodeInfo["type"] == "KnnNode" && <KnnVisualize props={nodeVisualize} />} 
       {nodeVisualize && (nodeInfo["type"] == "ApplyTransformerNode" || nodeInfo["type"] == "ApplyModelNode") && 
         <ApplyVisualize props={nodeVisualize} />
       }

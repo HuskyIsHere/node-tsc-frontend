@@ -1,11 +1,16 @@
 import Plot from "react-plotly.js";
 import ClassificationReport from "./VizComponents/ClassificationReport";
 import FocusButton from "./VizComponents/FocusButton";
+import { ReactTabulator } from 'react-tabulator';
 
-const KnnVisualize = (nodeVisualize) => {
 
-    const visualizeReport = nodeVisualize.nodeVisualize["scores"]
-    const visualizeKnn = nodeVisualize.nodeVisualize["knn"]
+const KnnVisualize = (props) => {
+
+    const visualizeReport = props.props["score"]
+    const visualizeKnn = props.props["knn"]
+    const timeseries = props.props["timeseries"]
+    const predictedLabels = props.props["predicted_labels"]
+    const actualLabels = props.props["actual_labels"]
 
     const numberOfTimeseries = visualizeKnn["timeseries"][0].length
 
@@ -13,10 +18,6 @@ const KnnVisualize = (nodeVisualize) => {
     var selectedShapelet2 = 1
 
     function updateKnnPlotData() {
-        const rawX = visualizeKnn["timeseries"].map(arr => arr[selectedShapelet1])
-        const rawY = visualizeKnn["timeseries"].map(arr => arr[selectedShapelet2])
-        const labels = visualizeKnn["labels"]
-        const preds = visualizeKnn["predicts"]
         const colors = [
             '#1f77b4',  // muted blue
             '#ff7f0e',  // safety orange
@@ -31,9 +32,13 @@ const KnnVisualize = (nodeVisualize) => {
         ]
         var count = 0
 
+        const labels = visualizeKnn["labels"]
         const uniqueLabels = Array.from(new Set(labels)).sort()
         console.log("uniqueLabel", uniqueLabels)
 
+        const rawX = visualizeKnn["timeseries"].map(arr => arr[selectedShapelet1])
+        const rawY = visualizeKnn["timeseries"].map(arr => arr[selectedShapelet2])
+        const preds = visualizeKnn["predicts"]
         var trainTraces = []
         uniqueLabels.forEach((label, _) => {
             console.log("process", label)
@@ -60,16 +65,22 @@ const KnnVisualize = (nodeVisualize) => {
             count++;
         })
         
+
+        // use predict label
+        const rawXPred = timeseries.map(arr => arr[selectedShapelet1])
+        const rawYPred = timeseries.map(arr => arr[selectedShapelet2])
+        console.log("length", rawXPred.length)
+
         count = 0
         var predTraces = []
         uniqueLabels.forEach((label, _) => {
             console.log("process", label)
             var x = []
             var y = []
-            for(var idx=0; idx<rawX.length; idx++) {
-                if(preds[idx] == label) {
-                    x.push(rawX[idx])
-                    y.push(rawY[idx])
+            for(var idx=0; idx<rawXPred.length; idx++) {
+                if(predictedLabels[idx] == label) {
+                    x.push(rawXPred[idx])
+                    y.push(rawYPred[idx])
                 }
             }
             predTraces.push({
@@ -104,6 +115,23 @@ const KnnVisualize = (nodeVisualize) => {
         Plotly.react(plot, data, { title: "KNN" })
     }
 
+    // START: PREDICT TABLE
+    var predictTableColumns = [
+        { title: "Index", field: "index" },
+        { title: "Actial Label", field: "actual"},
+        { title: "Predict Label", field: "predict"},
+    ]
+    var predictTableData = []
+    for(var idx=0; idx<predictedLabels.length; idx++) {
+        predictTableData.push({
+            index: idx,
+            actual: actualLabels[idx],
+            predict: predictedLabels[idx]
+        })
+    }
+    console.log(predictTableColumns, predictTableData)
+    // END: PREDICT TABLE
+
     return (
         <div>
             <h1>k-Nearest Neighbors</h1>
@@ -111,6 +139,7 @@ const KnnVisualize = (nodeVisualize) => {
             <div>
                 <FocusButton divId="knnPlot" btnText="Scatter Plot" />
                 <FocusButton divId="classificationReport" btnText="Report" />
+                <FocusButton divId="predictedLabels" btnText="Predict" />
             </div>
 
             <div id="knnPlot" className="focusable" style={{display: "block"}}>
@@ -144,6 +173,17 @@ const KnnVisualize = (nodeVisualize) => {
             </div>
 
             <ClassificationReport report={visualizeReport} className="focusable" />
+        
+            <div id='predictedLabels' className='focusable'>
+                <div>
+                    <div>this</div>
+                    <ReactTabulator 
+                        data={predictTableData}
+                        columns={predictTableColumns}
+                        layout={"fitData"}
+                    />
+                </div>
+            </div>
         </div>
     )
 }
