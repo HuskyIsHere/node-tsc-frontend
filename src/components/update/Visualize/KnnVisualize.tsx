@@ -54,6 +54,7 @@ const KnnVisualize = (props) => {
             trainTraces.push({
                 x: x,
                 y: y,
+                hoverinfo: 'skip', // disable hover for this trace
                 mode: "markers",
                 type: "scatter",
                 name: `train-${label}`,
@@ -78,15 +79,18 @@ const KnnVisualize = (props) => {
             console.log("process", label)
             var x = []
             var y = []
+            var text = []
             for(var idx=0; idx<rawXPred.length; idx++) {
                 if(predictedLabels[idx] == label) {
                     x.push(rawXPred[idx])
                     y.push(rawYPred[idx])
+                    text.push(`index: ${idx}<br />pred: ${predictedLabels[idx]}<br />true: ${actualLabels[idx]}`)
                 }
             }
             predTraces.push({
                 x: x,
                 y: y,
+                text: text,
                 mode: "markers",
                 type: "scatter",
                 name: `predict-${label}`,
