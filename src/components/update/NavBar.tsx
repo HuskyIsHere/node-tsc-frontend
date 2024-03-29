@@ -22,6 +22,7 @@ export const NavBar: React.FC = () => {
         >
           Home
         </button>
+        <button>Tutorial</button>
       </div>
     </div>
   );

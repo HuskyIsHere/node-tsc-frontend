@@ -130,3 +130,15 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 })
+
+async function createVizWindow() {
+  let win = new BrowserWindow({
+    width: 700, // specify your desired width
+    height: 800, // specify your desired height
+  });
+  win.loadURL('http://localhost:5173/visualize');
+}
+
+ipcMain.handle('showOpenWindow', async () => {
+  return await createVizWindow();
+});

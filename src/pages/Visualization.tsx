@@ -8,7 +8,7 @@ import ApplyVisualize from '@/components/update/Visualize/ApplyVisualize';
 
 export const Visualization: React.FC = () => {
 
-  const nodeId = sessionStorage.getItem("nodeId")
+  const nodeId = localStorage.getItem("nodeId")
 
   const [nodeInfo, setNodeInfo] = useState(null)
   const [nodeVisualize, setNodeVisualize] = useState(null)
@@ -41,6 +41,7 @@ export const Visualization: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("Visualize Page");
     console.log(nodeId);
     if (!isMount) {
       setIsMount(true)
@@ -55,9 +56,6 @@ export const Visualization: React.FC = () => {
 
   return (
     <div>
-      <p>Welcome to visualization</p>
-      <p>nodeId = {nodeId}</p>
-      {nodeInfo && <p>nodeType = {nodeInfo["type"]}</p>}
       {nodeVisualize && nodeInfo["type"] == "ShapeletTransformNode" && <ShapeletVisualize props={nodeVisualize}/>}
       {nodeVisualize && (nodeInfo["type"] == "InputNode" || nodeInfo["type"] == "PrepNode") && <ExplorationVisualize nodeVisualize={nodeVisualize}/>}
       {nodeVisualize && nodeInfo["type"] == "DecisionTreeNode" && <DecisionTreeVisualize props={nodeVisualize}/>}
