@@ -16,6 +16,7 @@ const KnnVisualize = (props) => {
 
     var selectedShapelet1 = 0
     var selectedShapelet2 = 1
+    var trainMarkerSize = 50
 
     function updateKnnPlotData() {
         const colors = [
@@ -57,8 +58,8 @@ const KnnVisualize = (props) => {
                 type: "scatter",
                 name: `train-${label}`,
                 marker: {
-                    size: 20,
-                    opacity: 0.2,
+                    size: trainMarkerSize,
+                    opacity: 0.1,
                     color: colors[count]
                 }
             })
@@ -100,19 +101,26 @@ const KnnVisualize = (props) => {
         return trainTraces.concat(predTraces)
     }
 
-    console.log(updateKnnPlotData())
+    function updateKnnPlotLayout() {
+        return {
+            title: "Shapelet Distances",
+            xaxis: {
+                title: `Shapelet ${selectedShapelet1}`,
+            },
+            yaxis: {
+                title: `Shapelet ${selectedShapelet2}`,
+            },
+        }
+    }
+
 
     function updateKnnPlot() {
-        console.log("using", selectedShapelet1, selectedShapelet2)
-
+        // update plot
         var plot = document.getElementById("plotKnn")
-
         var data = updateKnnPlotData()
-
-        console.log(data)
-
+        var layout = updateKnnPlotLayout()
         // rerender again
-        Plotly.react(plot, data, { title: "KNN" })
+        Plotly.react(plot, data, layout)
     }
 
     // START: PREDICT TABLE
@@ -144,6 +152,7 @@ const KnnVisualize = (props) => {
 
             <div id="knnPlot" className="focusable" style={{display: "block"}}>
                 <div>
+                    <label>x: </label>
                     <select 
                         defaultValue={0} 
                         onChange={(event) => {
@@ -154,6 +163,7 @@ const KnnVisualize = (props) => {
                             <option value={idx} key={idx}>Shapelet {idx}</option>)
                         }
                     </select>
+                    <label>y: </label>
                     <select 
                         defaultValue={1}
                         onChange={(event) => {
@@ -164,17 +174,29 @@ const KnnVisualize = (props) => {
                             <option value={idx} key={idx}>Shapelet {idx}</option>)
                         }
                     </select>
+                    <label>marker size: </label>
+                    <input 
+                        id="markerSizeSlider"
+                        type="range" 
+                        min="0"
+                        max="100"
+                        onChange={ (event) => {
+                            trainMarkerSize = parseInt(event.target.value)
+                            updateKnnPlot()
+                        }}
+                    />
                 </div>
 
                 <Plot 
                     data={updateKnnPlotData()}
+                    layout={updateKnnPlotLayout()}
                     divId="plotKnn"
                 />
             </div>
 
             <ClassificationReport report={visualizeReport} className="focusable" />
         
-            <div id='predictedLabels' className='focusable'>
+            <div id='predictedLabels' className='focusable' style={{display: "none"}}>
                 <div>
                     <ReactTabulator 
                         data={predictTableData}
