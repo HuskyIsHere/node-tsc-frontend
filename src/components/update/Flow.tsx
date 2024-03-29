@@ -118,6 +118,11 @@ export const Flow: React.FC = () => {
               sourceNode.type == "DecisionTreeNode"
             ) {
               postData["port-type"] = "MODEL";
+            } else if (
+              sourceNode.id == last.source &&
+              sourceNode.type == "KnnNode"
+            ) {
+              postData["port-type"] = "MODEL";
             }
           });
         }
