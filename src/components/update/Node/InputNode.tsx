@@ -11,7 +11,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         "id": id,
         "name": "TrainInput",
         "kwargs": {
-          "source": localStorage.getItem("Train"),
+          "source": localStorage.getItem("TrainInput"),
           "source_type": "arff",
         },
       };

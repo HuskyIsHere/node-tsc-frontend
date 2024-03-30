@@ -59,6 +59,7 @@ export const Flow: React.FC = () => {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
   const onConnect = useCallback(
     (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
     [setEdges]
@@ -207,6 +208,7 @@ export const Flow: React.FC = () => {
       getNodeInfo(node.id);
     }
   }
+  
 
   return (
     <>

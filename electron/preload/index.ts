@@ -12,6 +12,11 @@ contextBridge.exposeInMainWorld('electron', {
     showOpenWindow: async () => {
       return await ipcRenderer.invoke('showOpenWindow')
     }
+  },
+  tutorial: {
+    showtTutorialWindow: async () => {
+      return await ipcRenderer.invoke('showtTutorialWindow')
+    }
   }
 });
 
