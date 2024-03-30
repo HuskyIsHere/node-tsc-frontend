@@ -38,7 +38,7 @@ const KnnNode = ({ isConnectable, id, data }: NodeProps) => {
 
 
     return (
-        <div className="custom-node__input" onClick={showParameter}>
+        <div id={`input-${id}`} className="custom-node__input" onClick={showParameter}>
             <Handle type="target" position={Position.Top} isConnectable={isConnectable}/>
             <div className="handler-label">
                 <p>DATA</p>

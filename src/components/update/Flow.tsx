@@ -204,11 +204,24 @@ export const Flow: React.FC = () => {
   }
 
   function handleOnNodeClick(event, node): void {
+    setSelectedNodeId(node.id);
     if(node.type != "InputFileNode"){
       getNodeInfo(node.id);
     }
   }
+
+  useEffect(() => {
+    nodes.forEach((node) => {
+      const customNodeInput = document.querySelector(`#input-${node.id}`);
+      if (!customNodeInput) return; // Skip if element not found
   
+      if (node.id === selectedNodeId) {
+        customNodeInput.style.backgroundColor = "#808080";
+      } else {
+        customNodeInput.style.backgroundColor = "#FFFFFF";
+      }
+    });
+  }, [selectedNodeId, nodes]);
 
   return (
     <>

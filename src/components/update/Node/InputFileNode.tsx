@@ -23,7 +23,7 @@ const InputFileNode = ({ isConnectable, id }: NodeProps) => {
   };
 
   return (
-    <div className="custom-node__file">
+    <div id={`input-${id}`} className="custom-node__file">
       <select value={selectedOption} onChange={handleOptionChange}>
         <option value="TrainInput">TrainInput</option>
         <option value="TestInput">TestInput</option>

@@ -39,7 +39,7 @@ const ApplyTransformerNode = ({ isConnectable, id, data }: NodeProps) => {
     }
 
     return(
-        <div className="custom-node__input" onClick={showParameter}>
+        <div id={`input-${id}`} className="custom-node__input" onClick={showParameter}>
             <Handle type="target" position={Position.Top} id="input1" style={{ right: 35, left: 'auto' }} isConnectable={isConnectable} />
             <Handle type="target" position={Position.Top} id="input2" style={{ left: 40 }} isConnectable={isConnectable} />
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
