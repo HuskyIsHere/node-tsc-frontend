@@ -46,7 +46,8 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			"id": "",
 			"name": "DecisionTree",
 			"kwargs": {
-					"max_depth": 2
+					"max_depth": 2,
+					"random_state": 0,
 			}
 		},
 		ShapeletTransformNode: {
@@ -300,7 +301,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					<input
 						type='text'
 						placeholder="comma (,) separated window sizes"
-						value={updateData?.kwargs.window_sizes.toString() || [].toString()}
+						value={updateData?.kwargs.window_sizes || []}
 						onBlur={(e) => {
 							var value = e.target.value.split(",").map((v) => parseInt(v.trim()))
 							var filteredValue = []
@@ -404,61 +405,16 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 	}
 
 	function renderKwargsDecisionTree(){
+		// TODO: add criterion choices {“gini”, “entropy”, “log_loss”}
+		// TODO: add spliter options {"best", "random"}
+		// TODO: randon state (seed)
+		// [x] TODO: add max depth (advace)
+		// TODO: min_impurity_decrease (advance)
+		// TODO: ccp_alpha (advance)
 		return(
 			<div className='kwagrs-style'> 
 				<h3>Decision Tree Node</h3>
-				<div className="input-container">
-					<label>Numbers of Max Depths:</label>
-					<input
-						type="number"
-						value={updateData?.kwargs?.["max_depth"]}
-						onChange={(e) => {
-							const newValue = e.target.value;
-							setUpdateData(prevData => ({
-									...prevData,
-									kwargs: {
-											...prevData.kwargs,
-											max_depth: parseInt(newValue) 
-									}
-							}));
-					}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Cost-Complexity Pruning:</label>
-					<input
-						type="number"
-						step="any"
-						value={updateData?.kwargs?.["ccp_alpha"]}
-						onChange={(e) => {
-							const newValue = e.target.value;
-							setUpdateData(prevData => ({
-									...prevData,
-									kwargs: {
-											...prevData.kwargs,
-											ccp_alpha: parseInt(newValue) 
-									}
-							}));
-						}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Classification Weight:</label>
-					<input
-						type="text"
-						value={updateData?.kwargs?.["class_weight"]}
-						onChange={(e) => {
-							const newValue = e.target.value;
-							setUpdateData(prevData => ({
-									...prevData,
-									kwargs: {
-											...prevData.kwargs,
-											class_weight: parseInt(newValue) 
-									}
-							}));
-						}}
-					/>
-				</div>
+
 				<div className="input-container">
 					<label>Criterion:</label>
 					<select id="sort-boolean-select" 
@@ -474,54 +430,35 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 						}));
 					}}>
 						<option value="gini">Gini</option>
-						<option value="Entropy">Entropy</option>
+						<option value="entropy">Entropy</option>
 						<option value="log_loss">Log Loss</option>
 					</select>
 				</div>
+
 				<div className="input-container">
-					<label>Max Features:</label>
-					<input
-						type="text"
-						value={updateData?.kwargs?.["max_features"]}
-						onChange={(e) => {
-							const newValue = e.target.value.trim();
-							// Validate input
-							if (/^\d+$/.test(newValue)) {
-							// If input is an integer
-							setUpdateData(prevData => ({
+					<label>Split:</label>
+					<select id="sort-boolean-select" 
+					value={updateData?.kwargs?.["splitter"]}
+					onChange={(e) => {
+						const newValue = e.target.value;
+						setUpdateData(prevData => ({
 								...prevData,
 								kwargs: {
-								...prevData.kwargs,
-								max_features: parseInt(newValue)
-								}
-							}));
-							} else if (/^\d*\.\d+$/.test(newValue)) {
-							// If input is a float
-							setUpdateData(prevData => ({
-								...prevData,
-								kwargs: {
-								...prevData.kwargs,
-								max_features: parseFloat(newValue)
-								}
-							}));
-							} else if (newValue === "sqrt" || newValue === "log2") {
-							// If input is "sqrt" or "log2"
-							setUpdateData(prevData => ({
-								...prevData,
-								kwargs: {
-								...prevData.kwargs,
-								max_features: newValue
-								}
-							}));
+									...prevData.kwargs,
+									splitter: newValue
 							}
-						}}
-						/>
+						}));
+					}}>
+						<option value="best">Best</option>
+						<option value="random">Random</option>
+					</select>
 				</div>
+
 				<div className="input-container">
-					<label>Max Leaf Nodes:</label>
+					<label>Max Depths:</label>
 					<input
 						type="number"
-						value={updateData?.kwargs?.["max_leaf_nodes"]}
+						value={updateData?.kwargs?.["max_depth"]}
 						onChange={(e) => {
 							const newValue = e.target.value;
 							setUpdateData(prevData => ({
@@ -534,6 +471,45 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					}}
 					/>
 				</div>
+
+				<div className="input-container">
+					<label>Seed:</label>
+					<input 
+						type='number'
+						value={updateData?.kwargs.random_state}
+						onChange={(e) => {
+							setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									random_state: parseInt(e.target.value)
+								}
+							}))
+						}}
+					/>
+				</div>
+
+				<h4>Advances</h4>
+				
+				<div className="input-container">
+					<label>Minimal Cost-Complexity Pruning:</label>
+					<input
+						type="number"
+						step="any"
+						value={updateData?.kwargs?.["ccp_alpha"]}
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setUpdateData(prevData => ({
+									...prevData,
+									kwargs: {
+											...prevData.kwargs,
+											ccp_alpha: parseFloat(newValue) 
+									}
+							}));
+						}}
+					/>
+				</div>
+
 				<div className="input-container">
 					<label>Min Impurity Decrease:</label>
 					<input
@@ -551,81 +527,8 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					}}
 					/>
 				</div>
-				<div className="input-container">
-					<label>Min Sample Leaf:</label>
-					<input
-						type="number"
-						id="min-sample-leaf"
-						value={updateData?.kwargs?.["min_samples_leaf"]}
-						onChange={(e) => {
-						const newValue = e.target.value;
-						setUpdateData(prevData => ({
-							...prevData,
-							kwargs: {
-							...prevData.kwargs,
-							min_samples_leaf: newValue === "" ? "" : parseFloat(newValue)
-							}
-						}));
-						}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Min Sample Split:</label>
-					<input
-						type="number"
-						id="min-sample-leaf"
-						value={updateData?.kwargs?.["min_samples_split"]}
-						onChange={(e) => {
-						const newValue = e.target.value;
-						setUpdateData(prevData => ({
-							...prevData,
-							kwargs: {
-							...prevData.kwargs,
-							min_samples_split: newValue === "" ? "" : parseFloat(newValue)
-							}
-						}));
-						}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Min Weight Fraction Leaf:</label>
-					<input
-						type="number"
-						id="min-sample-leaf"
-						value={updateData?.kwargs?.["min_weight_fraction_leaf"]}
-						onChange={(e) => {
-						const newValue = e.target.value;
-						setUpdateData(prevData => ({
-							...prevData,
-							kwargs: {
-							...prevData.kwargs,
-							min_weight_fraction_leaf: parseFloat(newValue)
-							}
-						}));
-						}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Random State:</label>
-				</div>
-				<div className="input-container">
-					<label>Splitter:</label>
-					<select id="sort-boolean-select" 
-					value={updateData?.kwargs?.["splitter"]}
-					onChange={(e) => {
-						const newValue = e.target.value;
-						setUpdateData(prevData => ({
-								...prevData,
-								kwargs: {
-									...prevData.kwargs,
-									splitter: newValue
-							}
-						}));
-					}}>
-						<option value="best">Best</option>
-						<option value="random">Random</option>
-					</select>
-				</div>
+
+				{/* */}
 			</div>
 		)
 	}
