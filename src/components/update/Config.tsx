@@ -66,7 +66,8 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			"id" : "",
 			"name": "knn",
 			"kwargs": {
-				"n_neighbors": 5
+				"n_neighbors": 5,
+				"n_jobs": -1,
 			}
 		}
 	}
@@ -405,12 +406,6 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 	}
 
 	function renderKwargsDecisionTree(){
-		// TODO: add criterion choices {“gini”, “entropy”, “log_loss”}
-		// TODO: add spliter options {"best", "random"}
-		// TODO: randon state (seed)
-		// [x] TODO: add max depth (advace)
-		// TODO: min_impurity_decrease (advance)
-		// TODO: ccp_alpha (advance)
 		return(
 			<div className='kwagrs-style'> 
 				<h3>Decision Tree Node</h3>
@@ -537,6 +532,23 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 		return(
 			<div className='kwagrs-style'>
 				<h3>KNN Node</h3>
+				<div className='input-container'>
+					<label>#Neighbors</label>
+					<input 
+						type='number'
+						value={updateData?.kwargs?.n_neighbors}
+						onChange={(e) => {
+							setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									n_neighbors: parseInt(e.target.value)
+								}
+							}));
+						}}
+					/>
+				</div>
+
 				<div className="input-container">
 					<label>Algorithm:</label>
 					<select id="sort-boolean-select" 
@@ -557,76 +569,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 						<option value="brute">Brute</option>
 					</select>
 				</div>
-				<div className="input-container">
-					<label>Leaf Size:</label>
-					<input
-						type="number"
-						value={updateData?.kwargs?.["leaf_size"]}
-						onChange={(e) => {
-							const newValue = e.target.value;
-							setUpdateData(prevData => ({
-									...prevData,
-									kwargs: {
-											...prevData.kwargs,
-											leaf_size: parseInt(newValue) 
-									}
-							}));
-					}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Metric:</label>
-					<select id="sort-boolean-select" 
-					value={updateData?.kwargs?.["metric"]}
-					onChange={(e) => {
-						const newValue = e.target.value;
-						setUpdateData(prevData => ({
-								...prevData,
-								kwargs: {
-									...prevData.kwargs,
-									metric: newValue
-							}
-						}));
-					}}>
-						<option value="minkowski">Minkowski</option>
-						<option value="precomputed">Precomputed</option>
-					</select>
-				</div>
-				<div className="input-container">
-					<label>Metric Parameters:</label>
-					<input
-						type="text"
-						value={updateData?.kwargs?.["metric_params"]}
-						onChange={(e) => {
-						const newValue = e.target.value;
-						const parsedValues = newValue.split(',').map(val => parseInt(val.trim()));
-						setUpdateData(prevData => ({
-							...prevData,
-							kwargs: {
-							...prevData.kwargs,
-							metric_params: parsedValues
-							}
-						}));
-						}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Number of Jobs:</label>
-					<input
-						type="number"
-						value={updateData?.kwargs?.["n_jobs"]}
-						onChange={(e) => {
-							const newValue = e.target.value;
-							setUpdateData(prevData => ({
-									...prevData,
-									kwargs: {
-											...prevData.kwargs,
-											n_jobs: parseInt(newValue) 
-									}
-							}));
-					}}
-					/>
-				</div>
+
 				<div className="input-container">
 					<label>Power parameter:</label>
 					<input
@@ -638,12 +581,13 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 									...prevData,
 									kwargs: {
 											...prevData.kwargs,
-											p: parseFloat(newValue) 
+											p: parseInt(newValue) 
 									}
 							}));
 					}}
 					/>
 				</div>
+
 				<div className="input-container">
 					<label>Weights:</label>
 					<select id="sort-boolean-select" 
