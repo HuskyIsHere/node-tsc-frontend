@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge } from 'electron'
+import { ipcRenderer, contextBridge, BrowserWindow, app } from 'electron'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('electron', {
@@ -7,6 +7,16 @@ contextBridge.exposeInMainWorld('electron', {
       return await ipcRenderer.invoke('showOpenDialog');
     },
     // Add other dialog methods as needed
+  },
+  viz: {
+    showOpenWindow: async () => {
+      return await ipcRenderer.invoke('showOpenWindow')
+    }
+  },
+  tutorial: {
+    showtTutorialWindow: async () => {
+      return await ipcRenderer.invoke('showtTutorialWindow')
+    }
   }
 });
 

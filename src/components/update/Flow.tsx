@@ -38,8 +38,8 @@ const nodeTypes = {
 };
 
 export const Flow: React.FC = () => {
-  localStorage.setItem("TrainInput", "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TRAIN.arff");
-  localStorage.setItem("TestInput", "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TEST.arff");
+  // localStorage.setItem("TrainInput", "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TRAIN.arff");
+  // localStorage.setItem("TestInput", "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TEST.arff");
   let id = 0;
   const getId = () => uuidv4();
   const [numberNode, setNumberNode] = useState(0);
@@ -59,6 +59,7 @@ export const Flow: React.FC = () => {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
   const onConnect = useCallback(
     (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
     [setEdges]
@@ -116,6 +117,11 @@ export const Flow: React.FC = () => {
             } else if (
               sourceNode.id == last.source &&
               sourceNode.type == "DecisionTreeNode"
+            ) {
+              postData["port-type"] = "MODEL";
+            } else if (
+              sourceNode.id == last.source &&
+              sourceNode.type == "KnnNode"
             ) {
               postData["port-type"] = "MODEL";
             }
@@ -198,10 +204,24 @@ export const Flow: React.FC = () => {
   }
 
   function handleOnNodeClick(event, node): void {
+    setSelectedNodeId(node.id);
     if(node.type != "InputFileNode"){
       getNodeInfo(node.id);
     }
   }
+
+  useEffect(() => {
+    nodes.forEach((node) => {
+      const customNodeInput = document.querySelector(`#input-${node.id}`);
+      if (!customNodeInput) return; // Skip if element not found
+  
+      if (node.id === selectedNodeId) {
+        customNodeInput.style.backgroundColor = "#808080";
+      } else {
+        customNodeInput.style.backgroundColor = "#FFFFFF";
+      }
+    });
+  }, [selectedNodeId, nodes]);
 
   return (
     <>

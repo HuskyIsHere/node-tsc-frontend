@@ -54,6 +54,7 @@ async function createWindow() {
     },
     width: 1600,
     height: 950,
+    resizable: false,
     backgroundColor: "#ffffff"
   })
 
@@ -130,3 +131,29 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 })
+
+async function createVizWindow() {
+  let win = new BrowserWindow({
+    width: 700, // specify your desired width
+    height: 800, // specify your desired height
+    resizable: false
+  });
+  win.loadURL('http://localhost:5173/visualize');
+}
+
+ipcMain.handle('showOpenWindow', async () => {
+  return await createVizWindow();
+});
+
+async function createTutorialWindow() {
+  let win = new BrowserWindow({
+    width: 1000,
+    height: 800,
+    resizable: false
+  });
+  win.loadURL('http://localhost:5173/tutorial');
+}
+
+ipcMain.handle('showtTutorialWindow', async () => {
+  return await createTutorialWindow();
+});

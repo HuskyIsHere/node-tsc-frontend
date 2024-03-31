@@ -44,7 +44,7 @@ const PrepNode = ({ isConnectable, id, data }: NodeProps) => {
                 },]
 
     return (
-        <div className="custom-node__input">
+        <div id={`input-${id}`} className="custom-node__input">
             <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
             <div className="handler-label">
                 <p>DATA</p>

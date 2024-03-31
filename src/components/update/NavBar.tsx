@@ -12,6 +12,12 @@ export const NavBar: React.FC = () => {
     navigate("/");
   };
 
+  const handleShowOpenWindow = async ()=> {
+		const result = await window.electron.tutorial.showtTutorialWindow()
+    console.log(result);
+    
+	}
+
   return (
     <div className="nav-bar">
       <div>
@@ -22,6 +28,7 @@ export const NavBar: React.FC = () => {
         >
           Home
         </button>
+        <button onClick={handleShowOpenWindow}>Tutorial</button>
       </div>
     </div>
   );

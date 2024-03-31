@@ -716,14 +716,31 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 		);
 	}
 
+	const handleShowOpenWindow = async ()=> {
+		console.log(`selected node ${data?.id} type: ${data?.type}`)
+		localStorage.setItem("nodeId", data?.id)
+		const result = await window.electron.viz.showOpenWindow()
+		console.log(result);
+	}
+
+	const handleResetProject = async () => {
+		try {
+		  await axios.get('http://127.0.0.1:5000/project/reset');
+		  window.location.reload(); // Reload the window after successful reset
+		} catch (error) {
+		  console.error('Error resetting project:', error);
+		}
+	  };
+
 	return (
     <div className='panel'>
 			{updateData && renderKwargs()}
 			<button onClick={updateConfig}>Update</button>
 			<button onClick={handleExecute}>Execute</button>
 			{!disableVisualizeButton && (
-				<button onClick={handleVisualization}>Visualize</button>
-			)}
+				<button onClick={handleShowOpenWindow}>Visualize</button>
+			)}<br/>
+			<button className='reset-project' onClick={handleResetProject}>Reset Project</button>
     </div>
   );
 };
