@@ -107,7 +107,7 @@ export const Flow: React.FC = () => {
       };
 
       nodes.forEach((node) => {
-        if (node.id == last.target && node.type == "ApplyModelNode") {
+        if ( (node.id == last.target && node.type == "ApplyModelNode") || (node.id == last.target && node.type == "ApplyTransformerNode") ) {
           nodes.forEach((sourceNode) => {
             if (
               sourceNode.id == last.source &&
