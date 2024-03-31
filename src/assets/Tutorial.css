@@ -1,3 +1,25 @@
 h1 {
+    margin: 20px 10px 20px 10px;
+}
+
+h3 {
+    margin: 20px 0px;
+}
+
+.paragraph {
+    margin: 10px;
+    color: white;
+}
+.paragraph p {
+    text-indent:40px;
+    margin: 10px;
+    color: white;
+}
+
+.paragraph ol {
+    text-indent: 0; 
+}
+
+.button-group {
     margin: 10px;
 }
