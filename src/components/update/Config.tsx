@@ -14,6 +14,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 
 	// newly added for updated config panels
 	const [prepInstructions, setPrepInstructions] = useState<any[]>([]);
+	const [windowSizes, setWindowSizes] = useState<any[]>([]);
 
   const prepOptions = [
     { label: 'TestPrep', value: 'TestPrep' },
@@ -56,7 +57,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					"window_sizes":[18],
 					"sort":true,
 					"random_state":0,
-					"n_jobs":-1,
+					"n_jobs":-1, // do not appear in config panel
 					"remove_similar":true
 			}
 		},
@@ -166,26 +167,26 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			}
 		})
 
-		console.log(TAG, "instructions lists", setRoleInstructions, changeTypeInstructions)
-
+		// Set Role Events
 		function onAddSetRole(e) {
-			var newInstructions = ["set_role", "", ""]
+			var newInstructions = ["set_role", "", "target"]
 			setRoleInstructions.push(newInstructions)
 			updateInstructions()
 		}
 
 		function onSetRoleChange(e) {
-			var idx = parseInt(e.target.parentNode.id.split("-")[3])
+			var idx = parseInt(e.target.parentNode.parentNode.id.split("-")[3])
 			setRoleInstructions[idx][1] = e.target.value
 			updateInstructions()
 		}
 
 		function onRemoveSetRole(e) {
-			var idx = parseInt(e.target.parentNode.id.split("-")[3])
+			var idx = parseInt(e.target.parentNode.parentNode.id.split("-")[3])
 			setRoleInstructions.splice(idx, 1) // remove one elements
 			updateInstructions()
 		}
 
+		// Change Type Event
 		function onAddChangeType(e) {
 			var newInstructions = ["change_type", "", "int"]
 			changeTypeInstructions.push(newInstructions)
@@ -193,17 +194,18 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 		}
 
 		function onChangeTypeChange(e) {
-			var idx = parseInt(e.target.parentNode.id.split("-")[3])
+			var idx = parseInt(e.target.parentNode.parentNode.id.split("-")[3])
 			changeTypeInstructions[idx][1] = e.target.value
 			updateInstructions()
 		}
 
 		function onRemoveChangeType(e) {
-			var idx = parseInt(e.target.parentNode.id.split("-")[3])
+			var idx = parseInt(e.target.parentNode.parentNode.id.split("-")[3])
 			changeTypeInstructions.splice(idx, 1) // remove one elements
 			updateInstructions()
 		}
 
+		// Utils
 		function updateInstructions() {
 			instructions = setRoleInstructions.concat(changeTypeInstructions)
 			setPrepInstructions(instructions)
@@ -220,16 +222,20 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 				var previousColumn = instruction[1]
 				return (
 					<div id={`instruction-set-role-${idx}`}>
-						<label>Column:</label>
-						<input 
-							type='text' 
-							defaultValue={previousColumn}
-							onChange={(e) => { onSetRoleChange(e) }}
-						/>
-						<label>Role:</label>
-						<select name='role'>
-							<option value="target" selected>Target</option>
-						</select>
+						<div className='input-container'>
+							<label>Column:</label>
+							<input 
+								type='text' 
+								defaultValue={previousColumn}
+								onChange={(e) => { onSetRoleChange(e) }}
+							/>
+						</div>
+						<div className='input-container'>
+							<label>Role:</label>
+							<select name='role'>
+								<option value="target" selected>Target</option>
+							</select>
+						</div>
 						<button onClick={(e) => {onRemoveSetRole(e)}}>del</button>
 					</div>
 				)
@@ -242,17 +248,21 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			{ changeTypeInstructions.map((instruction, idx) => {
 				var previousColumn = instruction[1]
 				return (
-					<div id={`instruction-change-type-${idx}`}>
-						<label>Column:</label>
-						<input 
-							type='text' 
-							defaultValue={previousColumn}
-							onChange={(e) => { onChangeTypeChange(e) }}
-						/>
-						<label>Type:</label>
-						<select name='type'>
-							<option value="int" selected>int</option>
-						</select>
+					<div  id={`instruction-change-type-${idx}`}>
+						<div className='input-container'> 
+							<label>Column:</label>
+							<input 
+								type='text' 
+								defaultValue={previousColumn}
+								onChange={(e) => { onChangeTypeChange(e) }}
+							/>
+						</div>
+						<div className='input-container'> 
+							<label>Type:</label>
+							<select name='type'>
+								<option value="int" selected>int</option>
+							</select>
+						</div>
 						<button onClick={(e) => {onRemoveChangeType(e)}}>del</button>
 					</div>
 				)
@@ -260,51 +270,6 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			<button onClick={ (e) => onAddChangeType(e) }>
 				+
 			</button>
-
-			{/* { instructions.map((instruction, idx) => {
-				// TODO: rerender previous instructions
-				// TODO: add new instruction here
-				var defaultInstruction = instruction[0]
-				var defaultType = instruction[1]
-				var defaultCol = instruction[2]
-				
-				return (<div id={`instruction-${idx}`}>
-					<div>
-						<label>Instruction:</label>
-						<select 
-							name="instruction" 
-						>
-							<option value={"set_role"}>Set Role</option>
-							<option value={"change_type"} selected>Change Type</option>
-						</select>
-					</div>
-					<div>
-						<label>Column:</label>
-						<input 
-							name='feature' 
-							type='text' 
-							value={defaultType}
-						/>
-					</div>
-				</div>)
-			}) } */}
-
-			{/* <div className="input-container">
-				<label>Set Role:</label>
-				<input
-					type="text"
-					value={updateData?.kwargs?.instructions?.[0]?.[2]}
-					onChange={(e) => setUpdateData(prevData => ({ ...prevData, kwargs: { ...prevData.kwargs, instructions: [[prevData.kwargs.instructions[0][0], prevData.kwargs.instructions[0][1], e.target.value], prevData.kwargs.instructions[1]] } }))}
-				/>
-			</div>
-			<div className="input-container">
-				<label>Change Type:</label>
-				<input
-					type="text"
-					value={updateData?.kwargs?.instructions?.[1]?.[2]}
-					onChange={(e) => setUpdateData(prevData => ({ ...prevData, kwargs: { ...prevData.kwargs, instructions: [prevData.kwargs.instructions[0], [prevData.kwargs.instructions[1][0], prevData.kwargs.instructions[1][1], e.target.value]] } }))}
-				/>
-			</div> */}
 		</div>)
 	}
 
@@ -316,56 +281,70 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 	}
 
 	function renderKwargsShapeletTransform(){
+		// TODO: (optional) add window steps as parameters
 		return(
 			<div className='kwagrs-style'> 
 				<h3>Shapelet Transform Node</h3>
 				<div className="input-container">
-					<label>Numbers of Shapelets:</label>
+					<label>#Shapelets:</label>
 					<input
 						type="number"
 						value={updateData?.kwargs?.["n_shapelets"]}
 						onChange={(e) => setUpdateData(prevData => ({ ...prevData, kwargs: { ...prevData.kwargs, n_shapelets: parseInt(e.target.value) }}))}
 					/>
 				</div>
+				
+				{/* This is work around for generic updateData problem using onBlur (off focus)*/}
 				<div className="input-container">
-					<label>Sizes of Window:</label>
+					<label>Window Sizes:</label>
 					<input
-						className='resize'
-						type="number"
-						value={updateData?.kwargs?.["window_sizes"]?.[0]}
-						onChange={(e) => {
-								const newValue = e.target.value;
-								setUpdateData(prevData => ({
-										...prevData,
-										kwargs: {
-												...prevData.kwargs,
-												window_sizes: [
-													parseInt(newValue),
-													...prevData.kwargs.window_sizes.slice(1)]
-										}
-								}));
+						type='text'
+						placeholder="comma (,) separated window sizes"
+						value={updateData?.kwargs.window_sizes.toString() || [].toString()}
+						onBlur={(e) => {
+							var value = e.target.value.split(",").map((v) => parseInt(v.trim()))
+							var filteredValue = []
+							value.forEach((v, idx) => {
+								if (!isNaN(v)) {
+									filteredValue.push(v)
+								}
+							})
+							setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									window_sizes: filteredValue
+								}
+							}))
 						}}
-					/>
-					<input
-						className='resize'
-						type="number"
-						value={updateData?.kwargs?.["window_sizes"]?.[1]}
 						onChange={(e) => {
-								const newValue = e.target.value;
-								setUpdateData(prevData => ({
-										...prevData,
-										kwargs: {
-												...prevData.kwargs,
-												window_sizes: [
-														prevData.kwargs.window_sizes[0], 
-														parseInt(newValue),
-														...prevData.kwargs.window_sizes.slice(2) 
-												]
-										}
-								}));
+							setUpdateData(prevData => ({
+								...prevData,
+								kwargs: {
+									...prevData.kwargs,
+									window_sizes: e.target.value
+								}
+							}))
 						}}
 					/>
 				</div>
+
+				<div className='input-container'>
+					<label>Criterion:</label>
+					<select value={updateData.kwargs.criterion} onChange={(e) => {
+						setUpdateData(prevData => ({
+							...prevData,
+							kwargs: {
+								...prevData.kwargs,
+								criterion: e.target.value
+						}
+					}));
+					}}>
+						<option value="mutual_info">Mutual Information</option>
+						<option value="anova">Anova</option>
+					</select>
+				</div>
+
 				<div className="input-container">
 					<label>Sort:</label>
 					<select id="sort-boolean-select" 
@@ -383,45 +362,9 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					<option value="true">True</option>
 					<option value="false">False</option>
 				</select>
-
 				</div>
 				<div className="input-container">
-					<label>Numbers of Random State:</label>
-					<input 
-							type="number" 
-							value={updateData?.kwargs?.["random_state"]} 
-							onChange={(e) => {
-									const newValue = e.target.value;
-									setUpdateData(prevData => ({
-											...prevData,
-											kwargs: {
-													...prevData.kwargs,
-													random_state: parseInt(newValue) 
-											}
-									}));
-							}}
-					/>
-				</div>
-				<div className="input-container">
-					<label>Numbers of Jobs:</label>
-					<input 
-							type="number" 
-							value={updateData?.kwargs?.["n_jobs"]} 
-							onChange={(e) => {
-									const newValue = e.target.value;
-									setUpdateData(prevData => ({
-											...prevData,
-											kwargs: {
-													...prevData.kwargs,
-													n_jobs: parseInt(newValue) 
-											}
-									}));
-							}}
-							min="-Infinity"
-					/>
-				</div>
-				<div className="input-container">
-					<label>Remove the Similar:</label>
+					<label>Remove Similar:</label>
 					<select 
 						id="sort-boolean-select"
 						value={updateData?.kwargs?.["remove_similar"]}
@@ -439,6 +382,23 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 						<option value="true">True</option>
 						<option value="false">False</option>
 					</select>
+				</div>
+				<div className="input-container">
+					<label>Seed:</label>
+					<input 
+							type="number" 
+							value={updateData?.kwargs?.["random_state"]} 
+							onChange={(e) => {
+									const newValue = e.target.value;
+									setUpdateData(prevData => ({
+											...prevData,
+											kwargs: {
+													...prevData.kwargs,
+													random_state: parseInt(newValue) 
+											}
+									}));
+							}}
+					/>
 				</div>
 			</div>)
 	}

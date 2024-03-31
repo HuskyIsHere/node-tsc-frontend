@@ -11,6 +11,8 @@ const ExplorationVisualize = (nodeVisualize) => {
     const visualizeMetaData = nodeVisualize.nodeVisualize["meta"]
     const visualizeLabelDist = nodeVisualize.nodeVisualize["label_distribution"]
 
+    console.log("visualizeMetaData", visualizeMetaData)
+
     var numberOfTimeseries = visualizeData["data"].length
     var colTypes = visualizeData["col_type"]
 
