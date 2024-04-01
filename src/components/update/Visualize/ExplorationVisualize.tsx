@@ -108,7 +108,7 @@ const ExplorationVisualize = (nodeVisualize) => {
         <div>
             <h1>Exploration</h1>
         
-            <div>Total number of timeseries: {numberOfTimeseries}</div>
+            <div style={{ color: 'white' }}><h2>Total number of timeseries: {numberOfTimeseries}</h2></div>
 
             <div>
                 <FocusButton divId="colTypeTable" btnText="Column Types" />
@@ -142,6 +142,8 @@ const ExplorationVisualize = (nodeVisualize) => {
                     columns={colTypeTableColumns}
                     layout={"fitData"}
                     options={{
+                        layout: "fitColumns",
+                        resizableColumns: true,
                         rowFormatter:function(row) {
                             // TODO: add formatter for exclude columns
                             if (visualizeMetaData) {
@@ -161,6 +163,10 @@ const ExplorationVisualize = (nodeVisualize) => {
                     data={timeSeriesTableData}
                     columns={timeSeriesTableColumns}
                     layout={"fitData"}
+                    options={{
+                        layout: "fitColumns",
+                        resizableColumns: true,
+                    }}
                 />
             </div>
             }

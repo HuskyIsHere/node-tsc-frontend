@@ -230,39 +230,51 @@ const ShapeletVisualize = (props) => {
             </div>
 
             <div id="discoveredShapelets" className="focusable" style={initStyleDiscoveredShapelets}>
-                <Plot
-                    data={data}
-                    layout={layout}
-                    divId="plot"
-                />
+                <div style={{ display: 'flex' }}>
+                    <div style={{ flex: '1', marginRight: '10px' }}>
+                        <Plot
+                            data={data}
+                            layout={layout}
+                            divId="plot"
+                        />
+                    </div>
 
-                <div className="tableActionBar">
-                    <label>Label: </label>
-                    <select onChange={onLabelSelected}>                    
-                        <option value="all">all</option>
-                        { uniqueLabels.map((lb, idx) => <option value={lb} key={lb}>{lb}</option>)}
-                    </select>
-                    <button onClick={deselectAllRows}>Deselect All</button>
+                    <div style={{ flex: '1' }}>
+                        <div className="tableActionBar" style={{ marginBottom: '10px' }}>
+                            <label>Label: </label>
+                            <select onChange={onLabelSelected}>                    
+                                <option value="all">all</option>
+                                {uniqueLabels.map((lb, idx) => (
+                                    <option value={lb} key={lb}>{lb}</option>
+                                ))}
+                            </select>
+                            <button onClick={deselectAllRows}>Deselect All</button>
+                        </div>
+
+                        <ReactTabulator 
+                            onRef={(r) => (tableRef = r)}
+                            data={tableData}
+                            columns={columns}
+                            layout={"fitData"}
+                            options={{
+                                selectable: true,
+                                layout: "fitColumns",
+                            }}
+                            events={{
+                                dataFiltered: dataFiltered,
+                                rowSelectionChanged: rowSelectionChanged,
+                            }}
+                        />
+                    </div>
                 </div>
-
-                <ReactTabulator 
-                    onRef={(r) => (tableRef = r)}
-                    data={tableData}
-                    columns={columns}
-                    layout={"fitData"}
-                    options={{
-                        selectable: true
-                    }}
-                    events={{
-                        dataFiltered: dataFiltered,
-                        rowSelectionChanged: rowSelectionChanged,
-                    }}
-                />
             </div>
 
             <div id="distanceTable" className="focusable" style={initStyleDistanceTable}>
                 <div>
                     <ReactTabulator 
+                        options={{
+                        layout: "fitColumns",
+                        }}
                         data={distanceTableData}
                         columns={distanceTableColumns}
                         layout={"fitdata"}

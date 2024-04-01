@@ -1,4 +1,4 @@
-import ReactFlow from 'react-flow-renderer';
+import ReactFlow,{ Background, Controls}from 'react-flow-renderer';
 import 'react-flow-renderer/dist/style.css';
 import dagre from '@dagrejs/dagre';
 import Plot from "react-plotly.js";
@@ -54,14 +54,12 @@ const DecisionTreeVisualize = (props) => {
         var label = "" // TODO: change label renderer to be multiple lines
         if (feature != null) {
             label = `
-                Shapelet-${nodeData["feature"]} <= ${Number(nodeData["threshold"]).toFixed(4)}
-                <br />
+                Shapelet-${nodeData["feature"]} <= ${Number(nodeData["threshold"]).toFixed(4)}\n
                 Impurity: ${Number(nodeData["impurity"]).toFixed(4)}
                 `
         } else {
             label = `
-                Predict Label: ${values.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0)+1}
-                <br />
+                Predict Label: ${values.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0)+1}\n
                 Impurity: ${Number(nodeData["impurity"]).toFixed(4)}
                 `
         }
@@ -200,8 +198,8 @@ const DecisionTreeVisualize = (props) => {
                 <FocusButton divId="predictedLabels" btnText="Predict" />
             </div>
 
-            <div id="treeRules" className='focusable' style={initStyleTreeRules}>
-                <div style={{ width: '100vw', height: '40vh' }}>
+            <center><div id="treeRules" className='focusable' style={initStyleTreeRules}>
+                <div style={{ width: '90vw', height: '70vh', backgroundColor: "#9290C3", margin: '10px', borderRadius: '10px'   }}>
                     <ReactFlow 
                         nodes={initialNodes} 
                         edges={initialEdges}
@@ -219,7 +217,7 @@ const DecisionTreeVisualize = (props) => {
                         />
                     </div>
                 </div>
-            </div>
+            </div></center>
 
             <ClassificationReport report={visualizeReport} className="focusable" />
             
@@ -229,6 +227,10 @@ const DecisionTreeVisualize = (props) => {
                         data={predictTableData}
                         columns={predictTableColumns}
                         layout={"fitData"}
+                        options={{
+                            layout: "fitColumns",
+                            resizableColumns: true,
+                        }}
                     />
                 </div>
             </div>

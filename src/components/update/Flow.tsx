@@ -216,7 +216,7 @@ export const Flow: React.FC = () => {
       if (!customNodeInput) return; // Skip if element not found
   
       if (node.id === selectedNodeId) {
-        customNodeInput.style.backgroundColor = "#808080";
+        customNodeInput.style.backgroundColor = "#9290C3";
       } else {
         customNodeInput.style.backgroundColor = "#FFFFFF";
       }

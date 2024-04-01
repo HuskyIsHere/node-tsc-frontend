@@ -134,7 +134,7 @@ ipcMain.handle('open-win', (_, arg) => {
 
 async function createVizWindow() {
   let win = new BrowserWindow({
-    width: 700, // specify your desired width
+    width: 1200, // specify your desired width
     height: 800, // specify your desired height
     resizable: false
   });
@@ -147,7 +147,7 @@ ipcMain.handle('showOpenWindow', async () => {
 
 async function createTutorialWindow() {
   let win = new BrowserWindow({
-    width: 1000,
+    width: 1200,
     height: 800,
     resizable: false
   });

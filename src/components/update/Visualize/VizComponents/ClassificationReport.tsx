@@ -70,26 +70,32 @@ const ClassificationReport = (props) => {
 
     return (
         <div id="classificationReport" className={className} style={initStyle}>
-            {report && 
-            <div>
-                <div>Accuracy: {reportClassificationAcc}</div>
-                <ReactTabulator
-                    data={reportTableData}
-                    columns={reportTableColumns}
-                    layout={"fitData"}
-                />
+            <div style={{ display: 'flex' }}>
+                {confusion_matrix &&
+                <div style={{ flex: '1' }}>
+                    <Plot 
+                        data={reportData}
+                        layout={reportPlotLayout}
+                        divId="plotConfusionMatrix"
+                    />
+                </div>
+                }
+                <div style={{ flex: '0.05' }}></div> {/* Margin container */}
+                {report && 
+                <div style={{ flex: '1', marginRight: '10px' }}>
+                    <div style={{ color: 'white' }}><h2>Accuracy: {reportClassificationAcc}</h2></div>
+                    <ReactTabulator
+                        data={reportTableData}
+                        columns={reportTableColumns}
+                        layout={"fitData"}
+                        options={{
+                            layout: "fitColumns",
+                            resizableColumns: true,
+                        }}
+                    />
+                </div>
+                }
             </div>
-            }
-
-            {confusion_matrix &&
-            <div>
-                <Plot 
-                    data={reportData}
-                    layout={reportPlotLayout}
-                    divId="plotConfusionMatrix"
-                />
-            </div>
-            }
         </div>
     )
 }

@@ -155,47 +155,51 @@ const KnnVisualize = (props) => {
             </div>
 
             <div id="knnPlot" className="focusable" style={{display: "block"}}>
-                <div>
-                    <label>x: </label>
-                    <select 
-                        defaultValue={0} 
-                        onChange={(event) => {
-                            selectedShapelet1 = parseInt(event.target.value)
-                            updateKnnPlot()
-                        }} >
-                        { Array.from(Array(numberOfTimeseries).keys()).map((lb, idx) => 
-                            <option value={idx} key={idx}>Shapelet {idx}</option>)
-                        }
-                    </select>
-                    <label>y: </label>
-                    <select 
-                        defaultValue={1}
-                        onChange={(event) => {
-                            selectedShapelet2 = parseInt(event.target.value)
-                            updateKnnPlot()
-                        }}>
-                        { Array.from(Array(numberOfTimeseries).keys()).map((lb, idx) => 
-                            <option value={idx} key={idx}>Shapelet {idx}</option>)
-                        }
-                    </select>
-                    <label>marker size: </label>
-                    <input 
-                        id="markerSizeSlider"
-                        type="range" 
-                        min="0"
-                        max="100"
-                        onChange={ (event) => {
-                            trainMarkerSize = parseInt(event.target.value)
-                            updateKnnPlot()
-                        }}
-                    />
+                <div style={{ display: 'flex' }}>
+                    <div style={{ flex: '1' }}>
+                        <Plot 
+                            data={updateKnnPlotData()}
+                            layout={updateKnnPlotLayout()}
+                            divId="plotKnn"
+                        />
+                    </div>
+                    <div style={{ flex: '0.05' }}></div> {/* Margin container */}
+                    <div style={{ flex: '1', marginRight: '10px' }}>
+                        <label>x: </label>
+                        <select 
+                            defaultValue={0} 
+                            onChange={(event) => {
+                                selectedShapelet1 = parseInt(event.target.value)
+                                updateKnnPlot()
+                            }} >
+                            {Array.from(Array(numberOfTimeseries).keys()).map((lb, idx) => 
+                                <option value={idx} key={idx}>Shapelet {idx}</option>)
+                            }
+                        </select>
+                        <label>y: </label>
+                        <select 
+                            defaultValue={1}
+                            onChange={(event) => {
+                                selectedShapelet2 = parseInt(event.target.value)
+                                updateKnnPlot()
+                            }}>
+                            {Array.from(Array(numberOfTimeseries).keys()).map((lb, idx) => 
+                                <option value={idx} key={idx}>Shapelet {idx}</option>)
+                            }
+                        </select>
+                        <label>marker size: </label>
+                        <input 
+                            id="markerSizeSlider"
+                            type="range" 
+                            min="0"
+                            max="100"
+                            onChange={(event) => {
+                                trainMarkerSize = parseInt(event.target.value)
+                                updateKnnPlot()
+                            }}
+                        />
+                    </div>
                 </div>
-
-                <Plot 
-                    data={updateKnnPlotData()}
-                    layout={updateKnnPlotLayout()}
-                    divId="plotKnn"
-                />
             </div>
 
             <ClassificationReport report={visualizeReport} className="focusable" />
@@ -206,6 +210,10 @@ const KnnVisualize = (props) => {
                         data={predictTableData}
                         columns={predictTableColumns}
                         layout={"fitData"}
+                        options={{
+                            layout: "fitColumns",
+                            resizableColumns: true,
+                        }}
                     />
                 </div>
             </div>
