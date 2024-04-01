@@ -217,8 +217,10 @@ export const Flow: React.FC = () => {
   
       if (node.id === selectedNodeId) {
         customNodeInput.style.backgroundColor = "#9290C3";
+        customNodeInput.style.color = "#FFFFFF";
       } else {
         customNodeInput.style.backgroundColor = "#FFFFFF";
+        customNodeInput.style.color = "#000000";
       }
     });
   }, [selectedNodeId, nodes]);
