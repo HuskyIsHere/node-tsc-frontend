@@ -538,7 +538,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			<div className='kwagrs-style'>
 				<h3>KNN Node</h3>
 				<div className='input-container'>
-					<label>#Neighbors</label>
+					<label>Number of Neighbors</label>
 					<input 
 						type='number'
 						value={updateData?.kwargs?.n_neighbors}
