@@ -18,7 +18,7 @@ const DecisionTreeVisualize = (props) => {
     console.log("labels", predictedLabels, actualLabels)
 
     const nodeWidth = 172;
-    const nodeHeight = 36;
+    const nodeHeight = 100;
 
     // graph layouts
     const dagreGraph = new dagre.graphlib.Graph().setGraph({});
@@ -49,7 +49,23 @@ const DecisionTreeVisualize = (props) => {
         const node = dagreGraph.node(v);
         const nodeId = node["label"]
         const nodeData = visualizeTree["tree_nodes"][nodeId]
-        const label = `shapelet: ${nodeData["feature"]} impurity: ${Number(nodeData["impurity"]).toFixed(4)}`
+        const values = nodeData["values"][0]
+        const feature = nodeData["feature"]
+        var label = "" // TODO: change label renderer to be multiple lines
+        if (feature != null) {
+            label = `
+                Shapelet-${nodeData["feature"]} <= ${Number(nodeData["threshold"]).toFixed(4)}
+                <br />
+                Impurity: ${Number(nodeData["impurity"]).toFixed(4)}
+                `
+        } else {
+            label = `
+                Predict Label: ${values.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0)+1}
+                <br />
+                Impurity: ${Number(nodeData["impurity"]).toFixed(4)}
+                `
+        }
+
         initialNodes.push({
             id: nodeId.toString(),
             position: { 
@@ -82,32 +98,67 @@ const DecisionTreeVisualize = (props) => {
 
         const div = document.getElementById("extendedNodeInfo")
         const divGraph = div.childNodes[0]
-        const divInfo = div.childNodes[1]
 
         div.style.display = 'block'
 
         if (nodeData["feature"] != null) {
             divGraph.style.display = "block"
 
-            var sl = visualizeShapelet["shapelets"][nodeData["feature"]]
-            var shapeletData = {
-                x: Array.from(Array.from(Array(sl.length).keys())),
-                y: sl,
-                mode: "lines",
-                name: "shapelet"
-            }
+            var idx = nodeData["feature"]
+
+            const arrayRange = (start, stop) =>
+                Array.from(
+                    { length: (stop - start)},
+                    (_, index) => start + index
+            );
+
+            var sl = visualizeShapelet["shapelets"][idx]
+            var ts = visualizeShapelet["timeseries"][idx]
+            var indices = visualizeShapelet["indices"][idx]
+
+            console.log("data", sl, ts, indices)
+            var shapeletData = [
+                {
+                    x: Array.from(Array.from(Array(ts.length).keys())),
+                    y: ts,
+                    mode: "lines",
+                    name: "timeseries",
+                    hoverinfo: 'skip',
+                },
+                {
+                    x: arrayRange(indices[1], indices[2]),
+                    y: sl,
+                    mode: 'lines',
+                    name: 'shapelet',
+                    hoverinfo: 'skip',
+                }
+            ]
             console.log(shapeletData)
 
             var plot = document.getElementById("plot")
-            Plotly.react(plot, [shapeletData], {
-                title: "Shapelet"
+            Plotly.react(plot, shapeletData, {
+                title: `Shapelet ${idx}`,
+                shapes: [
+                    {
+                        type: 'rect',
+                        xref: 'x',
+                        yref: 'paper',
+                        x0: indices[1],
+                        y0: 0,
+                        x1: indices[2]-1,
+                        y1: 1,
+                        fillcolor: '#d3d3d3',
+                            opacity: 0.2,
+                            line: {
+                                width: 0
+                            },
+                    },
+                ]
             })
 
         } else {
             divGraph.style["display"] = "none"
         }
-        
-        divInfo.innerHTML = JSON.stringify(nodeData)
     }
     // END EXTENDED NODE INFO
 
@@ -166,9 +217,6 @@ const DecisionTreeVisualize = (props) => {
                             layout={ {title: 'Shapelet'} }
                             divId="plot"
                         />
-                    </div>
-                    <div>
-
                     </div>
                 </div>
             </div>

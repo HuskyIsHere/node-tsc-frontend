@@ -9,7 +9,7 @@ const KnnNode = ({ isConnectable, id, data }: NodeProps) => {
         "id": id,
         "name": "Knn",
         "kwargs": {
-            "n_neighbors": 5
+            "n_neighbors": 5,
         }
     });
 
