@@ -5,6 +5,12 @@ import { ReactTabulator } from 'react-tabulator'
 import { useRef } from "react";
 import FocusButton from "./VizComponents/FocusButton";
 
+interface TableRefType {
+    setFilter: (field: string, operator: string, value: any) => void;
+    clearFilter: () => void;
+    // Add other methods or properties as needed
+}
+
 const ExplorationVisualize = (nodeVisualize) => {
 
     const visualizeData = nodeVisualize.nodeVisualize["data"]
@@ -17,7 +23,7 @@ const ExplorationVisualize = (nodeVisualize) => {
     var colTypes = visualizeData["col_type"]
 
     // START TABLE COL TYPE
-    var colTypeTableRef = useRef()
+    var colTypeTableRef = useRef<TableRefType | null>(null);
     var uniqueColTypes = new Set()
     var colTypeTableColumns = [
         { title: "Name", field: "name" },
@@ -133,7 +139,9 @@ const ExplorationVisualize = (nodeVisualize) => {
                     }
                 }}>                    
                     <option value="all">all</option>
-                    { Array.from(uniqueColTypes).map((lb, idx) => <option value={lb} key={lb}>{lb}</option>)}
+                    {Array.from(uniqueColTypes).map((lb: string, idx: number) => (
+                        <option value={lb} key={lb}>{lb}</option>
+                    ))}
                 </select>
                 </div>
                 <ReactTabulator 

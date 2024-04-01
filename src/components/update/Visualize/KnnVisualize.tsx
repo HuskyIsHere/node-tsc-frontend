@@ -2,7 +2,7 @@ import Plot from "react-plotly.js";
 import ClassificationReport from "./VizComponents/ClassificationReport";
 import FocusButton from "./VizComponents/FocusButton";
 import { ReactTabulator } from 'react-tabulator';
-
+declare const Plotly: any;
 
 const KnnVisualize = (props) => {
 

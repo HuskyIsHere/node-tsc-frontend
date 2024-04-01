@@ -5,6 +5,7 @@ import Plot from "react-plotly.js";
 import FocusButton from './VizComponents/FocusButton';
 import ClassificationReport from './VizComponents/ClassificationReport';
 import { ReactTabulator } from 'react-tabulator';
+declare const Plotly: any;
 
 
 const DecisionTreeVisualize = (props) => {
@@ -94,8 +95,8 @@ const DecisionTreeVisualize = (props) => {
         const nodeData = object.node_data
         extendedNodeInfoMode = 1
 
-        const div = document.getElementById("extendedNodeInfo")
-        const divGraph = div.childNodes[0]
+        const div = document.getElementById("extendedNodeInfo") as HTMLDivElement;
+        const divGraph = div.childNodes[0] as HTMLElement;
 
         div.style.display = 'block'
 

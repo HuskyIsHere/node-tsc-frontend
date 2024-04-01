@@ -10,7 +10,7 @@ const InputFileNode = ({ isConnectable, id }: NodeProps) => {
 
   const handleOpenDialog = async () => {
     try {
-      const result = await window.electron.dialog.showOpenDialog(/* Add dialog options if needed */);
+      const result = await (window as any).electron.dialog.showOpenDialog();
       console.log("Selected files:", result.filePaths);
       localStorage.setItem(selectedOption, result.filePaths)
     } catch (error) {

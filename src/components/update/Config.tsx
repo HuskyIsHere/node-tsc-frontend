@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import '../../assets/Config.css';
-import { BrowserWindow, app } from 'electron';
 
 interface ConfigProps {
   data: any; 
@@ -653,7 +652,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 	const handleShowOpenWindow = async ()=> {
 		console.log(`selected node ${data?.id} type: ${data?.type}`)
 		localStorage.setItem("nodeId", data?.id)
-		const result = await window.electron.viz.showOpenWindow()
+		const result = await (window as any).electron.viz.showOpenWindow();
 		console.log(result);
 	}
 

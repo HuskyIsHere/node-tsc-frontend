@@ -7,6 +7,14 @@ import { update } from './update'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
+// import { spawn } from 'child_process';
+
+// // Path to the Python script
+// const pythonScript = join(__dirname, '..', 'node-tsc', 'app.py');
+
+// // Spawn a new process with the Python interpreter and script
+// spawn("python", [pythonScript])
+
 // The built directory structure
 //
 // ├─┬ dist-electron
@@ -59,7 +67,12 @@ async function createWindow() {
   })
 
   ipcMain.handle('showOpenDialog', async () => {
-    return await dialog.showOpenDialog();
+    if (win) {
+      return await dialog.showOpenDialog(win);
+    } else {
+        // Handle the case where win is null or undefined
+        throw new Error('Main window is not initialized.');
+    }
   });
 
   if (url) { // electron-vite-vue#298

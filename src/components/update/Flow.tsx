@@ -212,7 +212,7 @@ export const Flow: React.FC = () => {
 
   useEffect(() => {
     nodes.forEach((node) => {
-      const customNodeInput = document.querySelector(`#input-${node.id}`);
+      const customNodeInput = document.querySelector<HTMLDivElement>(`#input-${node.id}`);
       if (!customNodeInput) return; // Skip if element not found
   
       if (node.id === selectedNodeId) {

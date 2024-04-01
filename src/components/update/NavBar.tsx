@@ -13,7 +13,7 @@ export const NavBar: React.FC = () => {
   };
 
   const handleShowOpenWindow = async ()=> {
-		const result = await window.electron.tutorial.showtTutorialWindow()
+    const result = await (window as any).electron.tutorial.showtTutorialWindow()
     console.log(result);
     
 	}
