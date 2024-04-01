@@ -6,6 +6,16 @@ h3 {
     margin: 20px 0px;
 }
 
+table {
+    margin: 10px;
+}
+
+td {
+    vertical-align: top;
+    width: 50%;
+    padding: 10px;
+}
+
 .paragraph {
     margin: 10px;
     color: white;

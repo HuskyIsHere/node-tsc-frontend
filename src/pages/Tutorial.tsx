@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/Tutorial.css";
 import overview1 from '../assets/img/overview1.png';
+import inputFileNode from '../assets/img/node/InputFileNode.png'
+import inputNode from '../assets/img/node/InputNode.png'
+import inputNodeConfig from '../assets/img/config/InputNodeConfig.png'
+import prepNode from '../assets/img/node/PrepNode.png'
+import prepNodeConfig from '../assets/img/config/PrepNodeConfig.png'
+import applyModelNode from '../assets/img/node/ApplyModelNode.png'
+import applyTransformerNode from '../assets/img/node/ApplyTransformerNode.png';
+import shapeletTransformNode from '../assets/img/node/ShapeletTransformNode.png';
+import shapeletTransformNodeConfig from '../assets/img/config/ShapeletTransformNodeConfig.png';
+import decisionTreeNode from '../assets/img/node/DecisionTreeNode.png';
+import decisionTreeNodeConfig from '../assets/img/config/DecisionTreeNodeConfig.png';
+import knnNode from '../assets/img/node/KnnNode.png';
+import knnNodeConfig from '../assets/img/config/KnnNodeConfig.png';
 
-const showState = ["info", "overview", "node", "edge"]
+const showState = ["info", "overview", "node"]
 
 export const Tutorial: React.FC = () => {
 
@@ -85,6 +98,7 @@ export const Tutorial: React.FC = () => {
 					<h3><i>Node Configuration Zone (4)</i></h3>
 					<p>When you click on the node, the node configuration
 						appears in this zone and allows you to change the node's parameters and highlight on the current node that clicked.
+						After finish the configuration, you must click on the Update button in Control Button Zone (5) to update the node.
 					</p>
 					<h3><i>Control Button Zone (5)</i></h3>
 					<p>This Zone contain 4 buttons, Update, Execute, Reset Project, 
@@ -104,15 +118,192 @@ export const Tutorial: React.FC = () => {
 	function renderNodeInfo() {
 		return(
 			<div>
-
-			</div>
-		);
-	}
-
-	function renderEdgeInfo() {
-		return(
-			<div>
-
+				<div className='paragraph'>
+					<h2>Node Overview</h2>
+					<p>Create your own nodes by dragging them from the Side Bar to the Drop Zone. 
+						Each node has a function designed specifically for Time Series Classification. 
+						Each node will have a node label and a connection point to connect to another node.
+						Some nodes may be able to configure certain parameters, while others may not.
+					</p>
+					<h3><i>Input File Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={inputFileNode} alt="InputFileNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									<i>Node Detail</i>
+									<p>The "inputFileNode" is a node that opens a dialog box by clicking on "Choose File" button, allowing you to pick a file from their local system. 
+										It features a drop-down option for selecting the "TrainInput" or "TestInput" file type.
+									</p>
+									<i>Node Connection Point</i>
+									<p>
+										The "Output Connection Point" of this node will passing the data from the file that has been choose from the dialog box.
+									</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr/>
+					<h3><i>Input Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={inputNode} alt="InputNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									<p>The "TrainInput" node is an input component configured to handle input operations.
+									This node is designed to process data inputs from the specified ARFF file.
+									facilitating further operations or analyses.</p>
+								</td>
+							</tr>
+							<tr>
+								<td><img src={inputNodeConfig} alt="InputNodeConfig" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									The "TrainInput" node has a configuration zone designed with a drop-down feature allowing users to select between "TrainInput" and "TestInput". 
+									Equipped with this drop-down functionality, 
+									users can seamlessly toggle between different file types for input purposes.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr/>
+					<h3><i>Preparation Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={prepNode} alt="PrepNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									The "TrainPrep" node is configured with specific preprocessing instructions aimed at preparing training data for further analysis or modeling.
+								</td>
+							</tr>
+							<tr>
+								<td><img src={prepNodeConfig} alt="PrepNodeConfig" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>The "TrainPrep" node has a configuration zone designed with a drop-down feature allowing users to select between "TrainPrep" and "TestPrep".
+								the instructions include setting the role of a specified attribute on a "Set Role" field, followed by a data type on a "Change Type" field.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr/>
+					<h3><i>Apply Model Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={applyModelNode} alt="ApplyModelNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									This node
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr/>
+					<h3><i>Apply Transformer Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={applyTransformerNode} alt="ApplyTransformerNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									This node
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr/>
+					<h3><i>Shapelet Transform Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={shapeletTransformNode} alt="ShapeletTransformNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									The "ShapeletTransform" Node will extracts the most discriminative shapelets from a data set of time series. 
+								</td>
+							</tr>
+							<tr>
+								<td><img src={shapeletTransformNodeConfig} alt="ShapeletTransformNodeConfig" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>Row 2, Cell 2</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr/>
+					<h3><i>Decision Tree Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={decisionTreeNode} alt="DecisionTreeNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									This node
+								</td>
+							</tr>
+							<tr>
+								<td><img src={decisionTreeNodeConfig} alt="DecisionTreeNodeConfig" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>Row 2, Cell 2</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr/>
+					<h3><i>K-Nearest Neighbor Node</i></h3>
+					<table>
+						<thead>
+							<tr>
+								<th><h3>Node Information</h3></th>
+								<th><h3>Description</h3></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img src={knnNode} alt="KnnNode" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>
+									This node
+								</td>
+							</tr>
+							<tr>
+								<td><img src={knnNodeConfig} alt="KnnNodeConfig" style={{ maxWidth: '100%', height: 'auto', border: '2px solid white'  }}/></td>
+								<td>Row 2, Cell 2</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		);
 	}
@@ -124,17 +315,14 @@ export const Tutorial: React.FC = () => {
 				<button onClick={() => handleShowState(0)}>About Node TSC</button>
 				<button onClick={() => handleShowState(1)}>Overview</button>
 				<button onClick={() => handleShowState(2)}>Node Info</button>
-				<button onClick={() => handleShowState(3)}>Edge Info</button>
 			</div>
 			<hr />
 			{show === showState[0] ? (
     		renderIntroParagraph()
 			) : show === showState[1] ? (
 				renderOverview()
-			) : show === showState[2] ? (
-				renderNodeInfo()
 			) : (
-				renderEdgeInfo()
+				renderNodeInfo()
 			)}
 		</div>
 	);

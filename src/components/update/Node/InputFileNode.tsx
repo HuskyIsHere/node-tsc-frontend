@@ -28,7 +28,7 @@ const InputFileNode = ({ isConnectable, id }: NodeProps) => {
         <option value="TrainInput">TrainInput</option>
         <option value="TestInput">TestInput</option>
       </select>
-      <button onClick={handleOpenDialog}>Open Dialog</button>
+      <button onClick={handleOpenDialog}>Choose File</button>
       <Handle
         type="source"
         position={Position.Bottom}
