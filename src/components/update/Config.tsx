@@ -218,8 +218,12 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 		return(
 		<div className='kwagrs-style'> 
 			<h3>Prep Node</h3>
-
+			<hr/>
 			<h4>Set Role</h4>
+			<label><i>Adding New Set Role: </i></label>
+			<button onClick={ (e) => onAddSetRole(e) }>
+				+
+			</button>
 			{ setRoleInstructions.map((instruction, idx) => {
 				var previousColumn = instruction[1]
 				return (
@@ -242,11 +246,13 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					</div>
 				)
 			})}
-			<button onClick={ (e) => onAddSetRole(e) }>
-				+
-			</button>
+			<hr/>
 
 			<h4>Change Type</h4>
+			<label><i>Adding New Change Type: </i></label>
+			<button onClick={ (e) => onAddChangeType(e) }>
+				+
+			</button>
 			{ changeTypeInstructions.map((instruction, idx) => {
 				var previousColumn = instruction[1]
 				return (
@@ -269,9 +275,6 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 					</div>
 				)
 			})}
-			<button onClick={ (e) => onAddChangeType(e) }>
-				+
-			</button>
 		</div>)
 	}
 
@@ -288,7 +291,7 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 			<div className='kwagrs-style'> 
 				<h3>Shapelet Transform Node</h3>
 				<div className="input-container">
-					<label>#Shapelets:</label>
+					<label>Number of Shapelets:</label>
 					<input
 						type="number"
 						value={updateData?.kwargs?.["n_shapelets"]}
@@ -483,6 +486,8 @@ export const Config: React.FC<ConfigProps> = ({ data }) => {
 						}}
 					/>
 				</div>
+
+				<hr/>
 
 				<h4>Advances</h4>
 				

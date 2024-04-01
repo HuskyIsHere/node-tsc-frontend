@@ -89,6 +89,19 @@ h3 {
     margin: 0;
 }
 
+h4 {
+    color: white;
+}
+
 .reset-project {
     background-color: red;
+}
+
+.buttons-container {
+    display: flex;
+    align-items: center;
+}
+
+.buttons-container button {
+    margin-left: 10px; /* Adjust as needed */
 }
