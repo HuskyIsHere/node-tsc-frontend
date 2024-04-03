@@ -3,14 +3,6 @@ import 'react-tabulator/lib/styles.css';
 import { ReactTabulator } from 'react-tabulator'
 import { useRef } from "react";
 import FocusButton from "./VizComponents/FocusButton";
-declare const Plotly: any;
-
-interface TableRefType {
-    getData: (param: string) => any[]; // Define the method signature
-    deselectRow?: () => void; // Optional method
-    setFilter: (field: string, operator: string, value: any) => void;
-    clearFilter: () => void; // Define the clearFilter method
-}
 
 const ShapeletVisualize = (props) => {
 
@@ -24,7 +16,7 @@ const ShapeletVisualize = (props) => {
     const transformedData = props.props["transformed_data"]
     const transformer = props.props["model"]
 
-    const tableRef = useRef<TableRefType | null>(null);
+    var tableRef = useRef();
 
     var data = new Array() // shapelets
     var dataTimeSeries = new Object() // object of time series
@@ -178,28 +170,25 @@ const ShapeletVisualize = (props) => {
     // Utility functions
     function showTraces(selectedIndices=[]) {
         // hide all specified trace and show the rest
-        const plot = document.getElementById("plot") as Plotly.PlotlyHTMLElement;
+        var plot = document.getElementById("plot")
+        Plotly.react(plot, data, layout) // refresh all data in case of single time series case
 
-        // Set visibility based on selectedIndices
-        const visibility = selectedIndices.length === 0 ? true : selectedIndices.map(_ => true);
-        Plotly.relayout(plot, { 'violins.visible': visibility });
-
-        // // show all traces
-        // if (selectedIndices.length == 0) {
-        //     plot.data.forEach((s, idx) => {
-        //         s.visible = true
-        //     })
-        // } else {
-        //     // show specific 
-        //     plot.data.forEach((s, idx) => {
-        //         if (selectedIndices.includes(idx)) {
-        //             s.visible = true
-        //         } else {
-        //             s.visible = false
-        //         }
-        //     })
-        // }
-        // Plotly.react(plot, data, layout) // rerender again
+        // show all traces
+        if (selectedIndices.length == 0) {
+            plot.data.forEach((s, idx) => {
+                s.visible = true
+            })
+        } else {
+            // show specific 
+            plot.data.forEach((s, idx) => {
+                if (selectedIndices.includes(idx)) {
+                    s.visible = true
+                } else {
+                    s.visible = false
+                }
+            })
+        }
+        Plotly.react(plot, data, layout) // rerender again
     }
 
     // START: DISTANCE TABLE
@@ -259,11 +248,10 @@ const ShapeletVisualize = (props) => {
                                     <option value={lb as string} key={lb as string}>{lb as React.ReactNode}</option>
                                 ))}
                             </select>
-                            <button onClick={deselectAllRows}>Deselect All</button>
                         </div>
 
                         <ReactTabulator 
-                            onRef={(r) => (tableRef.current = r)}
+                            onRef={(r) => (tableRef = r)}
                             data={tableData}
                             columns={columns}
                             layout={"fitData"}
@@ -276,6 +264,7 @@ const ShapeletVisualize = (props) => {
                                 rowSelectionChanged: rowSelectionChanged,
                             }}
                         />
+                        <button onClick={deselectAllRows}>Deselect All</button>
                     </div>
                 </div>
             </div>

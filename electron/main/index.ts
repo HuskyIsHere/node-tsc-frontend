@@ -7,13 +7,11 @@ import { update } from './update'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-// import { spawn } from 'child_process';
+import { spawn } from 'child_process';
+const pythonScript = join(__dirname, '..', 'node-tsc', 'app.py');
 
-// // Path to the Python script
-// const pythonScript = join(__dirname, '..', 'node-tsc', 'app.py');
-
-// // Spawn a new process with the Python interpreter and script
-// spawn("python", [pythonScript])
+// Spawn a new process with the Python interpreter and script
+const backendProcess = spawn('bash', ['-c', `source ${__dirname}/../node-tsc/venv/bin/activate && python ${pythonScript}`]);
 
 // The built directory structure
 //
