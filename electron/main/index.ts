@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -6,6 +6,12 @@ import { update } from './update'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+import { spawn } from 'child_process';
+const pythonScript = join(__dirname, '..', 'node-tsc', 'app.py');
+
+// Spawn a new process with the Python interpreter and script
+const backendProcess = spawn('bash', ['-c', `source ${__dirname}/../node-tsc/venv/bin/activate && python ${pythonScript}`]);
 
 // The built directory structure
 //
@@ -50,12 +56,22 @@ async function createWindow() {
     title: 'Main window',
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
-        nodeIntegration: false,
+      preload: preload
     },
     width: 1600,
     height: 950,
+    resizable: false,
     backgroundColor: "#ffffff"
   })
+
+  ipcMain.handle('showOpenDialog', async () => {
+    if (win) {
+      return await dialog.showOpenDialog(win);
+    } else {
+        // Handle the case where win is null or undefined
+        throw new Error('Main window is not initialized.');
+    }
+  });
 
   if (url) { // electron-vite-vue#298
     win.loadURL(url)
@@ -126,3 +142,29 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 })
+
+async function createVizWindow() {
+  let win = new BrowserWindow({
+    width: 1200, // specify your desired width
+    height: 800, // specify your desired height
+    resizable: false
+  });
+  win.loadURL('http://localhost:5173/visualize');
+}
+
+ipcMain.handle('showOpenWindow', async () => {
+  return await createVizWindow();
+});
+
+async function createTutorialWindow() {
+  let win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    resizable: false
+  });
+  win.loadURL('http://localhost:5173/tutorial');
+}
+
+ipcMain.handle('showtTutorialWindow', async () => {
+  return await createTutorialWindow();
+});

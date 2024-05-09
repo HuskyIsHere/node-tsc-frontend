@@ -3,15 +3,15 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import axios from "axios";
 import "../../../assets/Node.css";
 
-const DecisionTreeNode = ({ isConnectable, id, data }: NodeProps) => {
-    const postData = {
-        "node-type": "DECISION_TREE",
+const KnnNode = ({ isConnectable, id, data }: NodeProps) => {
+    const [postData, setPostData] = useState({
+        "node-type": "KNN",
         "id": id,
-        "name": "DecisionTree",
+        "name": "Knn",
         "kwargs": {
-            "max_depth": 2
+            "n_neighbors": 5,
         }
-    };
+    });
 
     useEffect(() => {
         const autoPost = async () => {
@@ -30,11 +30,12 @@ const DecisionTreeNode = ({ isConnectable, id, data }: NodeProps) => {
             data.action = true;
             autoPost();
         }
-    }, [id]);
+    }, [id, postData, data]);
 
     function showParameter(): void {
 
     }
+
 
     return (
         <div id={`input-${id}`} className="custom-node__input" onClick={showParameter}>
@@ -43,7 +44,7 @@ const DecisionTreeNode = ({ isConnectable, id, data }: NodeProps) => {
                 <p>DATA</p>
             </div>
             <div>
-                <p>Decision Tree Node</p>
+                <p>K-Nearest Neighbors Node</p>
             </div>
             <Handle type="source" position={Position.Bottom} isConnectable={isConnectable}/>
             <div className="handler-label">
@@ -53,4 +54,4 @@ const DecisionTreeNode = ({ isConnectable, id, data }: NodeProps) => {
     );
 };
 
-export default memo(DecisionTreeNode);
+export default memo(KnnNode);

@@ -14,9 +14,6 @@ export const Home: React.FC = () => {
           <div className="column2">
             <Flow/>
           </div>
-          {/* <div className="column3">
-            <Config/>
-          </div> */}
         </div>
       </div>
     </div>

@@ -1,48 +1,34 @@
 import { memo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { dialog } from 'electron';
 import axios from "axios";
 import "../../../assets/Node.css";
 
 const InputFileNode = ({ isConnectable, id }: NodeProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string>("TrainInput");
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      return;
-    }
-
+  const handleOpenDialog = async () => {
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-
-      const response = await axios.post("MY_UPLOAD_ENDPOINT", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("File uploaded successfully:", response.data);
+      const result = await (window as any).electron.dialog.showOpenDialog();
+      console.log("Selected files:", result.filePaths);
+      localStorage.setItem(selectedOption, result.filePaths)
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error opening dialog:", error);
     }
+  }
+
+  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(event.target.value);
   };
 
   return (
-    <div className="custom-node__file">
-      <input type="file" onChange={handleFileChange} />
-      <button
-        className="upload-button"
-        onClick={handleUpload}
-        disabled={!selectedFile}
-      >
-        Upload
-      </button>
+    <div id={`input-${id}`} className="custom-node__file">
+      <select value={selectedOption} onChange={handleOptionChange}>
+        <option value="TrainInput">TrainInput</option>
+        <option value="TestInput">TestInput</option>
+      </select>
+      <button onClick={handleOpenDialog}>Choose File</button>
       <Handle
         type="source"
         position={Position.Bottom}

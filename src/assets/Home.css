@@ -1,6 +1,9 @@
 .home {
   text-align: center;
-  margin: 150px 2% 2% 2%;
+  margin-top: 75px;
+  margin-right: 2%;
+  max-height: 90vh; /* Set the maximum height to the viewport height */
+  overflow-y: auto; /* Allow vertical scrolling if necessary */
 }
 
 .home h1 {
@@ -14,20 +17,12 @@
   opacity: 60%;
 }
 
-.column1 {
-  float: left;
-  width: 15%;
-  padding: 25px;
-  height: 700px;
-  background-color: gray;
-}
-
 .column2 {
   float: left;
   width: 79%;
   padding: 25px;
-  height: 700px;
-  background-color: white;
+  height: 8000px;
+  background-color: #070F2B;
 }
 
 .row:after {

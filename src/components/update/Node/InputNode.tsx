@@ -11,7 +11,7 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
         "id": id,
         "name": "TrainInput",
         "kwargs": {
-          "source": "/Users/ditthaponglakagul/Desktop/END/Vite/GunPoint_TRAIN.arff",
+          "source": localStorage.getItem("TrainInput"),
           "source_type": "arff",
         },
       };
@@ -46,14 +46,20 @@ const InputNode = ({ isConnectable, id, data }: NodeProps) => {
                 },]
 
   return (
-    <div className="custom-node__input">
+    <div id={`input-${id}`} className="custom-node__input">
       <Handle
         type="target"
         position={Position.Top}
         isConnectable={isConnectable}
       />
+        <div className="handler-label">
+          <p>DATA</p>
+        </div>
         <div className="custom-node__header">
           Input Node
+        </div>
+        <div className="handler-label">
+          <p>DATA</p>
         </div>
       <Handle
         type="source"

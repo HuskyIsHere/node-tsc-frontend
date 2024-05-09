@@ -1,0 +1,52 @@
+h1 {
+    margin: 20px 10px 20px 10px;
+}
+
+h3 {
+    margin: 20px 0px;
+}
+
+table {
+    margin: 10px;
+}
+
+td {
+    vertical-align: top;
+    width: 50%;
+    padding: 10px;
+}
+
+tr > td:first-of-type {
+    width: 30%;
+}
+
+  /* Target the second td in each row */
+tr > td:first-of-type + td {
+    width: 70%;
+}
+
+/* i {
+    text-decoration: underline;
+} */
+
+.paragraph {
+    margin: 10px;
+    color: white;
+}
+.paragraph p {
+    text-indent:40px;
+    margin: 10px;
+    color: white;
+}
+
+.paragraph ol {
+    text-indent: 0; 
+}
+
+.paragraph li {
+    text-indent: 0;
+}
+
+.button-group {
+    margin: 10px;
+}
